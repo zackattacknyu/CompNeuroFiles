@@ -1,7 +1,36 @@
 %this is the reproduction of 1.6B from the book
 
+%{
+In order to get the raw data values, 
+I saved a png of the screenshot of the 1.6B
+graph and used the pixel values of the points
+%}
+img1 = imread('graph16bOriginal.png');
+image(img1)
+[rawS,rawF] = ginput; %gets the raw pixel values
+%%
+%{
+The points were selected in the following order:
+1: (0,0)
+2: (350,0)
+3: (0,60)
+
+These first three points are used for the calibration
+Points 4-12 are the data points
+%}
+zeroS = rawS(1);
+zeroF = rawF(1);
+scaleS = (rawS(2)-rawS(1))/350;
+scaleF = (rawF(3)-rawF(1))/60;
+
+rawDataS = rawS(4:12);
+rawDataF = rawF(4:12);
+dataS = (rawDataS-zeroS)/scaleS;
+dataF = (rawDataF-zeroF)/scaleF;
+
+%%
 %movement direction in degrees (estimates based on graph)
-sVals = [0 50 100 140 180 230 270 320 360];
+sVals = [0 45 90 140 180 230 270 320 360];
 
 %firing rate (estimates for numbers based on graph)
 fVals = [13 13 44 51 51 40 20 10 10];
