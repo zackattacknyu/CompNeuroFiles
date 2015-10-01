@@ -2,7 +2,7 @@
 
 
 %tuning curve x values
-xx = 0:1:360;
+ss = 0:1:360;
 
 %tuning curve parameter values
 r0 = 32.34;
@@ -19,9 +19,9 @@ width3 = 0.5;
 
 figure
 hold on
-plot(tunCurveX,ff(xx,width1),'r-');
-plot(tunCurveX,ff(xx,width2),'b-');
-plot(tunCurveX,ff(xx,width3),'g-');
+plot(ss,ff(ss,width1),'r-');
+plot(ss,ff(ss,width2),'b-');
+plot(ss,ff(ss,width3),'g-');
 legend('Original Curve',...
     'Width=2 revolution',...
     'Width = 1/2 revolution');
