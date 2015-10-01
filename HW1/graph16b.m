@@ -18,5 +18,5 @@ tunCurveY = r0 + (r_max - r0)*cosd(tunCurveX-s_max);
 figure
 plot(sVals,fVals,'b.');
 hold on
-plot(tunCurveX,tunCurveY);
+plot(tunCurveX,tunCurveY,'r-');
 hold off
