@@ -1,28 +1,34 @@
 
-xx = -180:1:180;
+numPoints = 100;
+%xx = -179:1:179;
+xxInit = rand(1,numPoints).*2*pi - pi;
+xx = sort(xxInit);
 
-curve1 = cosd(xx);
-curve2 = cosd(xx-90);
-curve3 = cosd(xx-180);
-curve4 = cosd(xx-270);
+%population size
+popSize=4;
 
-curve1(curve1<0)=0;
-curve2(curve2<0)=0;
-curve3(curve3<0)=0;
-curve4(curve4<0)=0;
+initAngles = linspace(0,2*pi,popSize+1);
+noiseWidth = pi/18;
+preferredAngles = initAngles(1:popSize)+rand(1,popSize)*2*noiseWidth - noiseWidth;
 
 figure
 hold on
-plot(xx,curve1,'r:');
-plot(xx,curve2,'g-');
-plot(xx,curve3,'b--');
-plot(xx,curve4,'k:');
+maxRates = rand(1,popSize)+1;
+curves = cell(1,popSize);
+for i = 1:popSize
+    curCurve = maxRates(i).*cos(xx-preferredAngles(i)); 
+    curCurve(curCurve<0)=0;
+    curves{i} = curCurve;
+    plot(xx,curCurve);
+end
 hold off
 %%
-c1 = 1;
-c2 = 1i;
-c3 = -1;
-c4 = -1i;
+
+directionVectors = cell(1,popSize);
+c1 = mag1*1;
+c2 = mag2*1i;
+c3 = mag3*-1;
+c4 = mag4*-1i;
 
 dirVecs = c1*curve1 + c2*curve2 + c3*curve3 + c4*curve4;
 %%
