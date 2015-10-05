@@ -1,42 +1,41 @@
 
 numPoints = 100;
-%xx = -179:1:179;
+
 xxInit = rand(1,numPoints).*2*pi - pi;
 xx = sort(xxInit);
 
 %population size
-popSize=4;
+%popSize=4;
+popSize=12;
 
-initAngles = linspace(0,2*pi,popSize+1);
-noiseWidth = pi/18;
+initAngles = linspace(-pi,pi,popSize+1);
+noiseWidth = 0;
 preferredAngles = initAngles(1:popSize)+rand(1,popSize)*2*noiseWidth - noiseWidth;
 
-figure
-hold on
 maxRates = rand(1,popSize)+1;
 curves = cell(1,popSize);
 for i = 1:popSize
     curCurve = maxRates(i).*cos(xx-preferredAngles(i)); 
     curCurve(curCurve<0)=0;
     curves{i} = curCurve;
-    plot(xx,curCurve);
+end
+
+figure
+hold on
+for i = 1:popSize
+   plot(xx,curves{i}); 
 end
 hold off
-%%
 
-directionVectors = cell(1,popSize);
-c1 = mag1*1;
-c2 = mag2*1i;
-c3 = mag3*-1;
-c4 = mag4*-1i;
+directionVectors = maxRates.*(exp(1i*preferredAngles));
 
-dirVecs = c1*curve1 + c2*curve2 + c3*curve3 + c4*curve4;
-%%
+angleVectors = zeros(size(xx));
+for i = 1:popSize
+    angleVectors = angleVectors + directionVectors(i)*curves{i};
+end
 
-dirs = radtodeg(angle(dirVecs));
-%%
-error = abs(dirs-xx);
-plot(xx,error);
-%%plot(dirs);
+anglesFromTuning = angle(angleVectors);
 
-%%
+error = abs(anglesFromTuning-xx);
+figure
+plot(radtodeg(xx),radtodeg(error));
