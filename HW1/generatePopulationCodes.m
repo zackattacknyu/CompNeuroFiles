@@ -18,6 +18,7 @@ function [ curves,error ] = generatePopulationCodes( xx,maxRates,preferredAngles
 
 popSize = length(maxRates);
 
+%this generates the cosine tuning curves for each neuron
 curves = cell(1,popSize);
 for i = 1:popSize
     curCurve = maxRates(i).*cos(xx-preferredAngles(i)); 
@@ -25,15 +26,21 @@ for i = 1:popSize
     curves{i} = curCurve;
 end
 
+%generate the vector for each tuning curve
+%   I use complex numbers to represent the vectors
 directionVectors = maxRates.*(exp(1i*preferredAngles));
 
+%uses the magnitude of each tuning curve
+%   to get the vector corresponding to each angle
 angleVectors = zeros(size(xx));
 for i = 1:popSize
     angleVectors = angleVectors + directionVectors(i)*curves{i};
 end
 
+%finds the angle from the tuning curve
 anglesFromTuning = angle(angleVectors);
 
+%computes the error
 error = abs(anglesFromTuning-xx);
 
 end
