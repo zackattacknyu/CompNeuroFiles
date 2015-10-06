@@ -1,6 +1,5 @@
 
 numAngles = 100;
-
 noiseWidth = 0;
 
 %population size
