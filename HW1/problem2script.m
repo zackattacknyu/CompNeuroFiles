@@ -72,24 +72,48 @@ graphErrors(xx,error);
 
 meanError6
 
-popSize=16;
-[~,~,meanError7] = ...
-    problem2function(numAngles,popSize,noiseWidth,...
-    minFiringRate,maxFiringRate );
-meanError7
+%{
+When I ran the above part, this was the result:
 
-popSize=32;
-[~,~,meanError8] = ...
-    problem2function(numAngles,popSize,noiseWidth,...
-    minFiringRate,maxFiringRate );
-meanError8
+meanError5=7.1 
+meanError6=4.4
+
+Figure 1 shows the population code graph for 4 neurons
+Figure 2 shows the graph of direction vs angle error for 4 neurons
+
+Figure 3 shows the population code graph for 8 neurons
+Figure 4 shows the graph of direction vs angle error for 8 neurons
+
+The error seems to decrease as we increase the number of neurons.
+The below blocks prove that out more
+%}
+
 %%
-popSize=64;
-means = zeros(1,100);
-for jj=1:1000
+
+%{
+Here I ran multiple trials for each population size case
+    to see the impact of population size on angle error
+%}
+numTrials = 1000;
+popSizes = [4 8 12 16 20 32 64 128];
+meanByPopSize = zeros(size(popSizes));
+for sizeNum=1:length(popSizes)
+    popSize = popSizes(sizeNum);
+    means = zeros(1,numTrials);
+   for jj = 1:numTrials
     [~,~,means(jj)] = ...
         problem2function(numAngles,popSize,noiseWidth,...
         minFiringRate,maxFiringRate );
+   end
+   meanByPopSize(sizeNum) = mean(means);
 end
-mean(means)
+meanByPopSize
+%{
+When I ran the script, I obtained the following values:
+#Neurons:      4       8      12     16     20     32     64    128
+meanByPopSize: 8.5    6.3    5.1    4.3    3.9    3.0    2.2    1.5
+
+Thus, as we increase the number of neurons, the average error does decrease
+%}
+
 
