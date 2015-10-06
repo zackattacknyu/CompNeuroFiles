@@ -17,7 +17,7 @@ function [ xx,preferredAngles,maxRates ] = generatePopCodeParameters( ...
 %                    are randomly distributed numbers whose range is
 %                    determined by these numbers
 
-halfRange = (0.95)*pi;
+halfRange = (0.85)*pi;
 
 %generates the input angles
 xxInit = rand(1,numAngles).*2*halfRange - halfRange;

@@ -7,6 +7,7 @@ function [ ] = graphErrors( xx,error )
 
 figure
 plot(radtodeg(xx),radtodeg(error));
+title('Error in Calculated Angle versus Wind Direction');
 xlabel('Wind Direction (degrees)');
 ylabel('Error (Degrees)');
 

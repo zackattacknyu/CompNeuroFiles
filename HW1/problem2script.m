@@ -45,7 +45,8 @@ The above 4 mean errors were all around 1e-15, so negligable
 %%
 %{
 When the preferred angles are all evenly spaced, but the firing
-    rate varies, **FILL IN WHAT HAPPENS**
+    rate varies, there is some error. It seems to be minimized
+    at the preferred directions of the neurons
 %}
 minFiringRate = 1;
 maxFiringRate = 2;
@@ -58,4 +59,37 @@ popSize=4;
 graphPopulationCodes(xx,curves,preferredAngles,maxRates);
 graphErrors(xx,error);
 
+meanError5
+
+popSize=8;
+
+[curves,error,meanError6,xx,preferredAngles,maxRates] = ...
+    problem2function(numAngles,popSize,noiseWidth,...
+    minFiringRate,maxFiringRate );
+
+graphPopulationCodes(xx,curves,preferredAngles,maxRates);
+graphErrors(xx,error);
+
+meanError6
+
+popSize=16;
+[~,~,meanError7] = ...
+    problem2function(numAngles,popSize,noiseWidth,...
+    minFiringRate,maxFiringRate );
+meanError7
+
+popSize=32;
+[~,~,meanError8] = ...
+    problem2function(numAngles,popSize,noiseWidth,...
+    minFiringRate,maxFiringRate );
+meanError8
+%%
+popSize=64;
+means = zeros(1,100);
+for jj=1:1000
+    [~,~,means(jj)] = ...
+        problem2function(numAngles,popSize,noiseWidth,...
+        minFiringRate,maxFiringRate );
+end
+mean(means)
 

@@ -24,6 +24,7 @@ for i = 1:popSize
     legendEntries{i} = strcat('Angle: ',displayAngle,';Max Rate:',displayRate);
 end
 legend(legendEntries);
+title('Firing Rate for different neurons as function of wind direction');
 xlabel('Wind Direction (degrees)');
 ylabel('Neuron Firing Rate (Hz)');
 hold off
