@@ -1,4 +1,4 @@
-function [ curves,error ] = generatePopulationCodes( xx,maxRates,preferredAngles )
+function [ curves,error,meanError ] = generatePopulationCodes( xx,maxRates,preferredAngles )
 %GENERATEPOPULATIONCODES This is used to generate the population codes
 %                        for the input angles in xx given the max firing
 %                        rates and preferred firing rates inputted. The
@@ -42,6 +42,8 @@ anglesFromTuning = angle(angleVectors);
 
 %computes the error
 error = abs(anglesFromTuning-xx);
+
+meanError = radtodeg(mean(error));
 
 end
 
