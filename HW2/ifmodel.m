@@ -1,16 +1,22 @@
-%values for 5.5
+
+iVals = 0:0.01:4;
+
 Rm = 10;
 EL = -65;
 Vth = -50;
 tauM = 10;
 
-Ie = 1;
-
 V0 = -65;
 
-V = @(t) EL + Rm*Ie + (V0 - EL - Rm*Ie)*exp(-t/tauM);
+numer = Rm.*iVals + EL - V0;
+denom = Rm.*iVals + EL - Vth;
 
-tVals = 0:1:500;
-Vvals = V(tVals);
+rInterInv = tauM.*log(numer./denom);
 
-plot(tVals,Vvals);
+rInter = (rInterInv).^(-1);
+
+figure
+plot(iVals,rInter);
+title('Firing Rate versus Current');
+xlabel('Current (nA)');
+ylabel('Firing Rate (Hz)');
