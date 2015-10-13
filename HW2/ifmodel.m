@@ -1,22 +1,26 @@
-
-iVals = 0:0.01:4;
-
+V0 = -65;
 Rm = 10;
-EL = -65;
+EL = V0;
 Vth = -50;
 tauM = 10;
+iVals = 0:0.05:4;
+numTimeSteps=2000;
+freqVals = zeros(size(iVals));
 
-V0 = -65;
-
-numer = Rm.*iVals + EL - V0;
-denom = Rm.*iVals + EL - Vth;
-
-rInterInv = tauM.*log(numer./denom);
-
-rInter = (rInterInv).^(-1);
+for j = 1:length(iVals)
+    curI = iVals(j);
+    curV = V0;
+    for t=0:numTimeSteps
+        curV = curV + (EL - curV + Rm*curI)/tauM;
+        if(curV > Vth)
+           curV = V0;
+           freqVals(j) = freqVals(j) + 1;
+        end
+    end
+end
 
 figure
-plot(iVals,rInter);
-title('Firing Rate versus Current');
+plot(iVals,freqVals);
+title('Frequency vs Current');
 xlabel('Current (nA)');
-ylabel('Firing Rate (Hz)');
+ylabel('Frequency (Hz)');
