@@ -6,3 +6,10 @@ When the permeability ratio is 20 (time steps 45-55),
     the membrane potential increases to around 40.13 mV
 %}
 goldman;
+
+%{
+Out of curiousity, I also plotted b value versus Em
+    to see what the curve looks like. It is a smooth
+    log curve as expected
+%}
+goldman2;

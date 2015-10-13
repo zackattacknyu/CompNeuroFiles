@@ -1,19 +1,5 @@
 function goldman
 
-    function em = getEm(b)
-        kPlusOut = 5;
-        kPlusIn = 125;
-        NaPlusOut = 120;
-        NaPlusIn = 12;
-        ClMinusIn = 5;
-        ClMinusOut = 125;
-        c=1;
-        
-        numer = kPlusOut + b*NaPlusOut + c*ClMinusIn;
-        denom = kPlusIn + b*NaPlusIn + c*ClMinusOut;
-        em = 58*log10(numer/denom);
-    end
-
 emVals = zeros(1,100);
 for i = 1:100
    emVals(i) = getEm(0.02); 
