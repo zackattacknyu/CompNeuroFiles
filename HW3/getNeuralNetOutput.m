@@ -1,4 +1,5 @@
-function [ horizNeuronOutput,vertNeuronOutput ] = getNeuralNetOutput( inputDir )
+function [ horizNeuronOutput,vertNeuronOutput ] = getNeuralNetOutput( ...
+    inputDir, neuronPrefDirs,neuronWeights, horizToVertWeight, vertToHorizWeight  )
 %GETNEURALNETOUTPUT Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -15,8 +16,7 @@ Inhibition between VertNeuron and HorizNeuron
 
 %}
 
-neuronPrefDirs = [pi/4 pi/2 3*pi/4 pi];
-neuronWeights = [50 100 50 100];
+
 
 %inputDir = pi*rand(1,1);
 
@@ -27,9 +27,6 @@ end
 
 vertNeuronInitOutput = neuronInitOutput(1)+neuronInitOutput(2);
 horizNeuronInitOutput = neuronInitOutput(3)+neuronInitOutput(4);
-
-horizToVertWeight = -0.15;
-vertToHorizWeight = -0.15;
 
 vertNeuronOutput = vertNeuronInitOutput + horizToVertWeight*horizNeuronInitOutput;
 horizNeuronOutput = horizNeuronInitOutput + vertToHorizWeight*vertNeuronInitOutput;

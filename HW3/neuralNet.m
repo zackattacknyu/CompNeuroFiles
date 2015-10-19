@@ -1,14 +1,20 @@
-prefDir1=pi/4;
-prefDir2=pi/2;
-prefDir3=3*pi/4;
-prefDir4=pi;
+neuronPrefDirs = (pi/4).*[1 2 3 4];
+
+neuronOutputs = zeros(1,4);
 
 inputDir = pi*rand(1,1);
 
-vNeuron1 = cos(prefDir1-inputDir);
-vNeuron2 = cos(prefDir2-inputDir);
-vNeuron3 = cos(prefDir3-inputDir);
-vNeuron4 = cos(prefDir4-inputDir);
+for i = 1:4
+    neuronOutputs(i) = max(0,cos(neuronPrefDirs(i)-inputDir));
+end
 
-horizWeight = vNeuron1 + vNeuron2;
-vertWeight = vNeuron3 + vNeuron4;
+horizWeight1 = neuronOutputs(1)+neuronOutputs(2);
+vertWeight1 = neuronOutputs(3)+neuronOutputs(4);
+
+synapseHoriz = 0.5*rand(1,1);
+synapseVert = 0.4*rand(1,1);
+
+horizWeight = horizWeight1 - synapseHoriz;
+vertWeight = vertWeight1 - synapseVert;
+
+outputDir = angle(horizWeight + 1i*vertWeight);
