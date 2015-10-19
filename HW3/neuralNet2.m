@@ -4,7 +4,7 @@ outputVert = zeros(size(inputDirs));
 outputHoriz = zeros(size(inputDirs));
 
 neuronPrefDirs = [pi/4 pi/2 3*pi/4 pi];
-neuronWeights = [50 150 50 150];
+neuronWeights = [50 50 50 50];
 HtoVweight = -0.2;
 VtoHweight = -0.2;
 
@@ -16,7 +16,7 @@ for i = 1:length(neuronPrefDirs)
    plot(radtodeg(inputDirs),curve);
 end
 hold off
-
+%%
 for i = 1:length(inputDirs)
    [outH,outV] = getNeuralNetOutput(inputDirs(i),neuronPrefDirs,...
        neuronWeights,HtoVweight,VtoHweight);
