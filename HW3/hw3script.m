@@ -190,10 +190,21 @@ legend('Vertical Neuron Firing Rate with old architecture',...
 
 %%
 %{
-This compares the old and new functions
-INSERT DETAIL HERE
+I am still having the issue that around 0 degrees, neither the horizontal
+    or vertical neuron output much. This is occuring because none of the
+    degree oriented neurons are near 0 degrees. The 180 degree neuron will
+    have no firing near zero due to a negative cosine. 
+For this problem though we care about the magnitude of the cosine rather
+    than whether it is positive or negative, so I decided to change the
+    tuning curve function to absolute value of the cosine to see the
+    result. 
+The graph shows the firing rate with the old and new functions.
 
 Results:
+With the new function, you get exactly the type of firing that you would
+    want. The horizontal firing rate has its max at 0 and 180 degrees and
+    its min at 90 degrees. The vertical firing rate has its max at 90
+    degrees and its min at 0 and 180 degrees. 
 %}
 
 neuronPrefDirs = [pi/4 pi/2 3*pi/4 pi];
@@ -203,19 +214,21 @@ VtoHweight = -0.3;
 neuronHorizWeights = [40 0 40 100];
 neuronVertWeights = [40 100 40 0];
 
+%uses the old function
 [outputHoriz,outputVert] = getOutArray(inputDirs,neuronPrefDirs,...
        neuronHorizWeights,neuronVertWeights,HtoVweight,VtoHweight,0);
 
+%uses the new function
 [outputHoriz1,outputVert1] = getOutArray(inputDirs,neuronPrefDirs,...
        neuronHorizWeights,neuronVertWeights,HtoVweight,VtoHweight,1);
    
 
 figure
 hold on
-plot(radtodeg(inputDirs),outputVert,'r-');
-plot(radtodeg(inputDirs),outputHoriz,'g-');
-plot(radtodeg(inputDirs),outputVert1,'r:');
-plot(radtodeg(inputDirs),outputHoriz1,'g:');
+plot(radtodeg(inputDirs),outputVert,'r--');
+plot(radtodeg(inputDirs),outputHoriz,'g--');
+plot(radtodeg(inputDirs),outputVert1,'r-');
+plot(radtodeg(inputDirs),outputHoriz1,'g-');
 xlabel('Angle in Degrees');
 ylabel('Firing Rate');
 title('Firing Rate Output with old and new function');
@@ -224,4 +237,4 @@ legend('Vertical Neuron Firing Rate with old function',...
     'Horizontal Neuron Firing Rate with old function',...
     'Vertical Neuron Firing Rate with new function',...
     'Horizontal Neuron Firing Rate with new function',...
-    'Location','eastoutside');
+    'Location','southoutside');
