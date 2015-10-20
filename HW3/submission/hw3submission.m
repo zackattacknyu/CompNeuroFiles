@@ -1,4 +1,4 @@
-function [ ] = hw3submission( )
+function [ ] = zdestefa_hw3submission( )
 
 %input directions in radians
 inputDirs = 0:0.01:pi;
@@ -69,8 +69,6 @@ legend('Vertical Neuron Firing Rate with Inhibition',...
     'Vertical Neuron Firing Rate without Inhibition',...
     'Horizontal Neuron Firing Rate without Inhibition',...
     'Location','southoutside');
-
-
 
 %{
 With this network, we want more emphasis on the 90 degree neuron than on
