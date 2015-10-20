@@ -68,7 +68,7 @@ legend('Vertical Neuron Firing Rate with Inhibition',...
     'Horizontal Neuron Firing Rate without Inhibition',...
     'Location','southoutside');
 
-%%
+
 
 %{
 With this network, we want more emphasis on the 90 degree neuron than on
@@ -132,7 +132,7 @@ legend('Vertical Neuron Firing Rate without skewed weights',...
     'Vertical Neuron Firing Rate with 40% weight on 45 degree neuron',...
     'Horizontal Neuron Firing Rate with 40% weight on 135 degree neuron',...
     'Location','southoutside');
-%%
+
 %{
 After finding out that the weights should be skewed, I am next going to go
     with the new architecture for this problem. 
@@ -188,7 +188,7 @@ legend('Vertical Neuron Firing Rate with old architecture',...
     'Horizontal Neuron Firing Rate with new architecture',...
     'Location','southoutside');
 
-%%
+
 %{
 I am still having the issue that around 0 degrees, neither the horizontal
     or vertical neuron output much. This is occuring because none of the
