@@ -18,7 +18,7 @@ Inhibition between VertNeuron and HorizNeuron
 
 horizNeuronExcit = zeros(1,4);
 vertNeuronExcit = zeros(1,4);
-for i = 1:4
+for i = 1:length(neuronPrefDirs);
    horizNeuronExcit(i) = getFeedForwardOutput(inputDir,...
        neuronPrefDirs(i),neuronHorizWeights(i),spflag); 
    vertNeuronExcit(i) = getFeedForwardOutput(inputDir,...
