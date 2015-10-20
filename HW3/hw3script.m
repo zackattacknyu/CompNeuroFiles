@@ -1,3 +1,4 @@
+%input directions in radians
 inputDirs = 0:0.01:pi;
 
 %{
@@ -10,7 +11,8 @@ Neuron4 (tuned to 180 degrees)
 Each neuron sends to a horizontal and vertical neuron
     with varying weights. 
 
-The horizontal and vertical neuron sends an inhibitory signal to each other
+The horizontal and vertical neuron sends 
+    an inhibitory signal to each other
 %}
 
 %{
@@ -38,8 +40,6 @@ Because the inhibitory effect helps emphasize horizontal and vertical
 neuronPrefDirs = [pi/4 pi/2 3*pi/4 pi];
 neuronHorizWeights = [0 0 100 100];
 neuronVertWeights = [100 100 0 0];
-
-
 HtoVweight = -0.3;
 VtoHweight = -0.3;
 
@@ -238,3 +238,67 @@ legend('Vertical Neuron Firing Rate with old function',...
     'Vertical Neuron Firing Rate with new function',...
     'Horizontal Neuron Firing Rate with new function',...
     'Location','southoutside');
+
+%{
+Given the previous success, I decided to see if adding a neuron tuned to 0
+    degrees helps. It has the same weight as the 180 degree neuron for the 
+    horizontal and vertical output. I kept the old tuning curve function
+    for this test.
+
+Results:
+The horizontal and vertical output look very similar to the case where I
+    changed the tuning function to absolute value of the cosine. Thus it
+    seems that adding a neuron tuned to 0 degrees also helps make the
+    output look as expected. 
+%}
+
+neuronPrefDirs = [pi/4 pi/2 3*pi/4 pi];
+HtoVweight = -0.3;
+VtoHweight = -0.3;
+
+neuronHorizWeights = [40 0 40 100];
+neuronVertWeights = [40 100 40 0];
+
+%uses the current architecture
+[outputHoriz,outputVert] = getOutArray(inputDirs,neuronPrefDirs,...
+       neuronHorizWeights,neuronVertWeights,HtoVweight,VtoHweight,0);
+
+neuronPrefDirs = [0 pi/4 pi/2 3*pi/4 pi];
+neuronHorizWeights = [100 40 0 40 100];
+neuronVertWeights = [0 40 100 40 0];
+   
+%uses the experimental architecture
+[outputHoriz1,outputVert1] = getOutArray(inputDirs,neuronPrefDirs,...
+       neuronHorizWeights,neuronVertWeights,HtoVweight,VtoHweight,0);
+   
+
+figure
+hold on
+plot(radtodeg(inputDirs),outputVert,'r--');
+plot(radtodeg(inputDirs),outputHoriz,'g--');
+plot(radtodeg(inputDirs),outputVert1,'r-');
+plot(radtodeg(inputDirs),outputHoriz1,'g-');
+xlabel('Angle in Degrees');
+ylabel('Firing Rate');
+title('Firing Rate Output with current and experimental architecture');
+hold off
+legend('Vertical Neuron Firing Rate with current architecture',...
+    'Horizontal Neuron Firing Rate with current architecture',...
+    'Vertical Neuron Firing Rate with experimental architecture',...
+    'Horizontal Neuron Firing Rate with experimental architecture',...
+    'Location','southoutside');
+
+%{
+Conclusion:
+The given architecture works well in detecting how horizontal or vertical
+    the input direction is for angles between 45 and 180 degrees. However
+    in the 0 to 45 degree range, there is a deficiency. It is mostly
+    horizontal there but the horizontal output cannot be as high as desired
+    unless some modification is made to the architecture. 
+I tested two modifications that worked well:
+    1. Changing the tuning function to absolute value. The main benefit
+        this provided was that the 180 degree neuron had a firing rate near
+        0 degrees
+    2. Adding a neuron at 0 degrees but keeping the tuning function the same.
+        This had a similar benefit to 1
+%}
