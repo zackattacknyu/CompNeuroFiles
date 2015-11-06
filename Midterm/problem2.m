@@ -9,11 +9,12 @@ cc = -65;
 dd = 8;
 
 % STDP lists for LTD and LTP weight changes
-LTP = zeros(1,numCA3);    % from CA3 to CA1 neurons
+LTP = 0;    % from CA3 to CA1 neurons
 LTD = zeros(1,numCA3);    % from CA3 to CA1 neurons
 
 % STDP parameters
-A_plus = 0.1;
+%A_plus = 0.1;
+A_plus = 0.05;
 A_minus = -0.105;
 t_plus = 20;
 t_minus = 20;
@@ -63,12 +64,14 @@ for step = 1:100
             % 3)    set the max LTP for  weights that connect from neuron i
             % 4)    set the max LTD for weights that connect to neuron i
 
-            strength(step) = min(wmax,strength(step) + LTP(step)); % LTP to weights that connect to i from all exc 
+            
             strength(step) = max(wmin,strength(step) + LTD(step)); % LTD to weights that connect to all exc from i
-            LTP(step) = A_plus;   % set max LTP to all exc from i
             LTD(step) = A_minus;  % set max LTD to i from all exc
             
         end
+        
+        strength(step) = min(wmax,strength(step) + LTP); % LTP to weights that connect to i from all exc 
+        LTP = A_plus;   % set max LTP to all exc from i
         
         v1=v1+0.5*(0.04*v1^2+5*v1+140-u1+I1);
         v1=v1+0.5*(0.04*v1^2+5*v1+140-u1+I1);
