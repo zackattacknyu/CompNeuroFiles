@@ -36,10 +36,11 @@ u1 = bb*v1;
 numFirings = zeros(1,100);
 
 %maximum initial weight
-maxInitWeight = 30;
+maxInitWeight = 6;
 
 %max init current for CA3 neurons
-maxInitCurrent = 30;
+% makes sure it fires with Iz model if this amount of current is injected
+maxInitCurrent = 80;
 
 
 gaussWeights = normpdf(1:100,50,sigmaStrength);
@@ -142,8 +143,8 @@ end
 figure
 plot(numFirings)
 
-figure
-plot(strength)
+%figure
+%plot(strength)
 
-figure
-plot(skewValues)
+%figure
+%plot(skewValues)
