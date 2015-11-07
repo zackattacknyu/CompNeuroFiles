@@ -23,8 +23,8 @@ wmin = 0;
 wmax = 5.0;
 %wmax = 30.0;
 
-sigma=1; %sigma for place field Gaussians
-sigmaStrength = 10; %sigma for strength Gaussian curve
+sigma=3; %sigma for place field Gaussians
+sigmaStrength = 15; %sigma for strength Gaussian curve
 
 maxCurrent = 30;
 
