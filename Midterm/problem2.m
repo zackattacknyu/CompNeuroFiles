@@ -43,8 +43,7 @@ maxInitCurrent = 80;
 gaussWeights = normpdf(1:100,50,sigmaStrength);
 gaussWeights = gaussWeights*(1/max(gaussWeights)); %sets max to 1
 strength = gaussWeights*maxInitWeight;
-%strength = gaussWeights*100;
-%strength = gaussWeights*wmax;
+initStrength = strength;
 
 vv = -65*ones(1,numCA3);
 uu = bb.*vv;
@@ -143,6 +142,7 @@ for lap = 1:numLaps
     
         %figure
         %plot(numFirings)
+        numInitFirings = numFirings;
         
         
     end
@@ -152,6 +152,13 @@ for lap = 1:numLaps
     
 end
 
+figure
+hold on
+plot(numInitFirings,'r-');
+plot(numFirings,'b-');
+hold off
+legend('Number of Firings before Experience','Number of Firings After Experience');
+
 %figure
 %plot(numFirings)
 
@@ -160,16 +167,16 @@ end
 
 figure
 hold on
+title('Skewness Values (replication of 4d)');
 plot(inputSkewValues,'b-')
 plot(outputSkewValues,'r-')
 legend('Input Skewness','Output Skewness','Location','eastoutside')
 hold off
 
-%%
-
 
 figure
 hold on
+title('Spike Times (replication of 4e)');
 plot(firstSpikeTime,'b-')
 plot(lastSpikeTime,'r-')
 hold off
