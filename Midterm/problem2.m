@@ -5,77 +5,134 @@ I used the Izhikevich spiking neuron model to replicate the moments when
 the neurons spike. The STDP model is used to modify the synaptic connection
 strength as the neuron fires.
 
-
+The rat moves from location i to i+1 in each time step.
+The rat does 17 laps from location 1 to 100
+When the rat is at location i, the following happens:
+1) Each CA3 is injected with an amount of current that depends on the
+    Gaussian place field of the CA3 neurons
+2) If a CA3 neuron spikes, then it sends a signal to the CA1 neuron. 
+    The LTD of the CA3->CA1 synapse is updated and the LTP is reset
+3) For the CA1 neuron, a current is injected that is dependent on which
+    synaptic connections spiked
+4) If the CA1 neuron spikes, then the LTP of all the CA3->CA1 neurons are
+    updated and their LTD is reset
 
 %}
 
+%number of laps the rat will do
+numLaps = 17;
 
-
-%number of CA3 neurons
+%this is the number of CA3 neurons
 numCA3 = 100;
 
-%parameters from izzynet code
+%these are the a,b,c,d parameters in the Izhikevich model
+%the default parameters from the class model worked well
 aa = 0.02;
 bb = 0.2;
 cc = -65;
 dd = 8;
 
-% STDP lists for LTD and LTP weight changes
-LTP = zeros(1,numCA3);    % from CA3 to CA1 neurons
-LTD = zeros(1,numCA3);    % from CA3 to CA1 neurons
-
-% STDP parameters
+%{
+These are the STDP parameters.
+Most of the default parameters worked well, however I changed
+    the wmax parameter in order to allow stronger synaptic strengths.
+This was done to allow more current to flow and thus increase the number of
+    spikes that occur. 
+By allowing more spiking, it was much easier to see the difference in
+    number of spikes in the center versus on the edge
+%}
 A_plus = 0.1;
 A_minus = -0.105;
 t_plus = 20;
 t_minus = 20;
-
 wmin = 0;
-%wmax = 5.0;
-wmax = 20.0;
+wmax = 20.0; %this was changed from a value of 5
 
-sigma=2; %sigma for place field Gaussians
+%{
+Here are the parameters that control the place fields and synpatic
+    strengths
+
+Let N be the number of CA3 neurons
+The CA3 neurons are at location 1,2,3,...,N
+The current injected by a given CA3 neuron at location i is a gaussian
+    centered at i
+
+The synaptic strength of the CA3 to CA1 neuron connections is a gaussian
+    centered at N/2
+%}
+
+%{
+These two parameters control the Gaussian for synaptic strength. I made
+    sure the maximum strength is equal to the maximum in the STDP model so
+    that the center starts off as strong as possible. 
+I also used a small sigma value so that the center is very strong compared
+    to the other synpases. 
+In this way, the initial preference toward firing when the rat is in the center is
+    as great as possible within the model. 
+%}
+maxInitWeight = wmax; %value for peak of Gaussian curve
 sigmaStrength = 3; %sigma for strength Gaussian curve
 
-%CA1 neuron
+%{
+These two parameters are used to adjust the place field Gaussians. 
+I wanted to make sure that if a rat is at location i, then neuron i will
+    fire. I thus made the max current very high in the Gaussian curve. This
+    way there is quite a high chance of spiking in the Izhikevich model.
+I kept the sigma relatively low so that there is a low chance of the
+    neighboring neurons spiking when the rat is at location i. 
+%}
+maxInitCurrent = 80; %max current injected by Gaussian place field
+sigma=2; %sigma for place field Gaussians
+
+
+%{
+The parameters that can vary in the model have now been established.
+The rest of the code is used for running the model
+    and generating the graphs of the results.
+%}
+
+% STDP lists for LTD and LTP weight changes
+% they represent strength changes for the CA3 to CA1 synaptic connections
+LTP = zeros(1,numCA3); 
+LTD = zeros(1,numCA3);    
+
+%{
+As a coding preference, I keep track of the voltages and recovery variables 
+    for the CA3 and CA1 neurons separately. 
+%}
+
+%voltage and recovery variable for CA1 neurons
 v1 = cc;
 u1 = bb*v1;
 
-%CA3 neurons
-numFirings = zeros(1,100);
-
-%maximum initial weight
-maxInitWeight = wmax;
-
-%max init current for CA3 neurons
-% makes sure it fires with Iz model if this amount of current is injected
-maxInitCurrent = 80;
-
-
-gaussWeights = normpdf(1:100,50,sigmaStrength);
-gaussWeights = gaussWeights*(1/max(gaussWeights)); %sets max to 1
-strength = gaussWeights*maxInitWeight;
-initStrength = strength;
-
-vv = -65*ones(1,numCA3);
+%voltages and recovery variables for CA1 neurons
+vv = cc.*ones(1,numCA3);
 uu = bb.*vv;
 
-numLaps = 17;
+
+
+%Here I initialize the synaptic strengths of the CA3 to CA1 connections
+gaussWeights = normpdf(1:numCA3,numCA3/2,sigmaStrength); %generates the Gaussian values
+gaussWeights = gaussWeights*(1/max(gaussWeights)); %sets max value to 1
+strength = gaussWeights*maxInitWeight; %sets max value to our desired maximum
+initStrength = strength; %saves initial value for later graph
+
+%used to keep track of the skewness values for later graph
 inputSkewValues = zeros(1,numLaps);
 outputSkewValues = zeros(1,numLaps);
 
+%used to keep track of first and last spike time for later graph
 firstSpikeTime = zeros(1,numLaps);
 lastSpikeTime = zeros(1,numLaps);
 
+%keeps track of number of times each CA3 neuron fired for later graph
+numFirings = zeros(1,numCA3);
+
 for lap = 1:numLaps
     
-    
-    %LTP = zeros(1,numCA3);    % from CA3 to CA1 neurons
-    %LTD = zeros(1,numCA3);    % from CA3 to CA1 neurons
-    
-    for step = 1:100
+    for step = 1:numCA3
         
-        I = normpdf(step,1:100,sigma);
+        I = normpdf(step,1:numCA3,sigma);
         I = I/(max(I)); %sets max to 1
         I = I*maxInitCurrent; %sets max current to 30 so neuron will fire
         
@@ -90,9 +147,8 @@ for lap = 1:numLaps
 
         %CA1 neuron current
         % adds strengths of ones that fired
-        % eliminated random values since we know what will go into CA1
-        % neuron
-        I1 = sum(strength(fired));
+        % NOTE: ADD OSCILLATORY INPUT
+        I1 = -1*abs(real(exp(1i*step*pi/8))) + sum(strength(fired));
         
         %update CA3 neurons that fired
         if ~isempty(fired)
