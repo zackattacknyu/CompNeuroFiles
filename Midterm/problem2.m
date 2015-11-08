@@ -56,11 +56,6 @@ outputSkewValues = zeros(1,numLaps);
 firstSpikeTime = zeros(1,numLaps);
 lastSpikeTime = zeros(1,numLaps);
 
-%adjustArray = linspace(-1,1,length(numFirings));
-%adjustArray = adjustArray.*normpdf(adjustArray,0,2);
-adjustArray = ones(1,length(numFirings));
-adjustArray(1:end/2)=-1;
-
 for lap = 1:numLaps
     
     
@@ -152,9 +147,8 @@ for lap = 1:numLaps
         
     end
     
-    inputSkewValues(lap) = skewness(strength.*adjustArray);
-    outputSkewValues(lap) = skewness(numFirings.*adjustArray);
-    
+    inputSkewValues(lap) = myskewness(strength);
+    outputSkewValues(lap) = myskewness(numFirings);
     
 end
 
