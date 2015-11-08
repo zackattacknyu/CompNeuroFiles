@@ -20,8 +20,8 @@ t_plus = 20;
 t_minus = 20;
 
 wmin = 0;
-wmax = 5.0;
-%wmax = 30.0;
+%wmax = 5.0;
+wmax = 20.0;
 
 sigma=2; %sigma for place field Gaussians
 sigmaStrength = 3; %sigma for strength Gaussian curve
@@ -36,7 +36,7 @@ u1 = bb*v1;
 numFirings = zeros(1,100);
 
 %maximum initial weight
-maxInitWeight = 3;
+maxInitWeight = wmax;
 
 %max init current for CA3 neurons
 % makes sure it fires with Iz model if this amount of current is injected
@@ -110,7 +110,7 @@ for lap = 1:numLaps
         %CA1 neuron voltage
         if(v1>=30)
             
-            if(firstSpikeTime(lap)<=0)
+            if(firstSpikeTime(lap) < 1)
                firstSpikeTime(lap)=step; 
             end
             lastSpikeTime(lap)=step;
@@ -154,9 +154,9 @@ plot(numFirings)
 
 %figure
 %plot(strength)
-
-%figure
-%plot(skewValues)
+%%
+figure
+plot(skewValues)
 
 %%
 
