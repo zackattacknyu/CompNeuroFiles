@@ -139,9 +139,7 @@ for lap = 1:numLaps
     end
     
     if(lap<2)
-    
-        %figure
-        %plot(numFirings)
+
         numInitFirings = numFirings;
         
         
@@ -152,8 +150,18 @@ for lap = 1:numLaps
     
 end
 
+
 figure
 hold on
+title('Strength Before and After Experience (replication of 4a)')
+plot(initStrength,'r-');
+plot(strength,'b-');
+legend('Strength Before Experience','Strength After Experience');
+hold off
+
+figure
+hold on
+title('Firing Rate Before and After Experience (replication of 4b)');
 plot(numInitFirings,'r-');
 plot(numFirings,'b-');
 hold off
