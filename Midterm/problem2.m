@@ -125,82 +125,94 @@ outputSkewValues = zeros(1,numLaps);
 firstSpikeTime = zeros(1,numLaps);
 lastSpikeTime = zeros(1,numLaps);
 
-%keeps track of number of times each CA3 neuron fired for later graph
+%keeps track of number of times each CA3 neuron fired for 
+%   later graph of firing rates
 numFirings = zeros(1,numCA3);
 
+%now run the model
 for lap = 1:numLaps
     
+    %each step the rat takes
+    %one time step happens in the Izhikevich model
     for step = 1:numCA3
         
-        I = normpdf(step,1:numCA3,sigma);
-        I = I/(max(I)); %sets max to 1
-        I = I*maxInitCurrent; %sets max current to 30 so neuron will fire
         
-        %I1 = gaussWeights(step)*10;
+        %{
+        This is the current that gets injected into each CA3 neuron at this
+            time step where the rat is at location j. 
+        Each neuron i gets injected with a current equal to the
+            value of its Gaussian place field at location j.
+        %}
+        I = normpdf(step,1:numCA3,sigma); %gets value of all Gaussians
+        I = I/(max(I)); %sets max of those curves to 1
+        I = I*maxInitCurrent; %sets max current to be injected
         
-        %update CA3 neuron voltages
+        %inject current into CA3 neurons and update the voltages
+        %   and recovery variables
         vv=vv+0.5.*(0.04.*vv.^2+5.*vv+140-uu+I);
         vv=vv+0.5.*(0.04.*vv.^2+5.*vv+140-uu+I);
         uu=uu+aa.*(bb.*vv-uu);
 
+        %see which CA3 neurons fired in this time step
         fired = find(vv>=30);
 
-        %CA1 neuron current
-        % adds strengths of ones that fired
-        % NOTE: ADD OSCILLATORY INPUT
+        %{
+        Here I calculate how much current the CA1 neuron receives.
+        It will recieve the sum of the strengths of the synapses 
+            for the CA3 neurons that fired.
+        There will also be an oscillatory inhibitory input, which I made
+            very small to mitigate its effects.
+        %}
         I1 = -1*abs(real(exp(1i*step*pi/8))) + sum(strength(fired));
         
-        %update CA3 neurons that fired
+        %update info about CA3 neurons that just fired
         if ~isempty(fired)
+            
+            %update voltages and recovery variables according to 
+            %   Izhikevich model
             vv(fired)=cc;
             uu(fired)=uu(fired)+dd;
-                
-            % if neuron i is excitatory
-            % 1)    apply LTP for weights that connect to neuron i 
-            %       (i.e., the neurons that fired prior to i)  
-            % 2)    apply LTD for weights from neuron i 
-            %       (i.e., the neurons that i fired before) 
-            % 3)    set the max LTP for  weights that connect from neuron i
-            % 4)    set the max LTD for weights that connect to neuron i
 
-            strength(fired) = max(wmin,strength(fired) + LTD(fired)); % LTP to weights that connect to i from all exc 
+            %for the synapses that fired, we apply LTD to their strength 
+            %   and reset their values
+            strength(fired) = max(wmin,strength(fired) + LTD(fired)); 
             LTP(fired) = A_plus;
 
             
         end;
         
-        %update CA1 neuron voltages
+        %inject current into CA1 neuron and update its voltage
+        %   and recovery variable value
         v1=v1+0.5*(0.04*v1^2+5*v1+140-u1+I1);
         v1=v1+0.5*(0.04*v1^2+5*v1+140-u1+I1);
         u1=u1+aa*(bb*v1-u1);
 
-
-        %CA1 neuron voltage
+        %see if the CA1 neuron fired
         if(v1>=30)
             
+            %update spike times that we are keeping track of
             if(firstSpikeTime(lap) < 1)
                firstSpikeTime(lap)=step; 
             end
             lastSpikeTime(lap)=step;
             
+            %reset the voltage and recovery variable for CA1 neuron
+            % according to Izhikevich model
             v1 = cc;
             u1 = u1+dd;
+            
+            %update number of firings to keep track of firing rate
+            %   at each location
             numFirings(step) = numFirings(step)+1;
 
-            % if neuron i is excitatory
-            % 1)    apply LTP for weights that connect to neuron i 
-            %       (i.e., the neurons that fired prior to i)  
-            % 2)    apply LTD for weights from neuron i 
-            %       (i.e., the neurons that i fired before) 
-            % 3)    set the max LTP for  weights that connect from neuron i
-            % 4)    set the max LTD for weights that connect to neuron i
-
-            strength = min(wmax,strength + LTP); % LTP to weights that connect to i from all exc 
+            %If the CA1 neuron fires, then we update the LTP values for all
+            %   the synapses and reset all the LTD values
+            strength = min(wmax,strength + LTP); 
             LTD(:) = A_minus;
 
         end
 
-        % exponentially decay LTD and LTP based on time constants
+        %Here we exponentially decay LTD and LTP as per the STDP model
         LTP = LTP - LTP/t_plus;
         LTD = LTD - LTD/t_minus;
 
