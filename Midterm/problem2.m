@@ -1,4 +1,3 @@
-clear all;
 
 %number of CA3 neurons
 numCA3 = 100;
@@ -26,8 +25,6 @@ wmax = 20.0;
 sigma=2; %sigma for place field Gaussians
 sigmaStrength = 3; %sigma for strength Gaussian curve
 
-maxCurrent = 30;
-
 %CA1 neuron
 v1 = cc;
 u1 = bb*v1;
@@ -53,12 +50,19 @@ vv = -65*ones(1,numCA3);
 uu = bb.*vv;
 
 numLaps = 17;
-skewValues = zeros(1,numLaps);
+inputSkewValues = zeros(1,numLaps);
+outputSkewValues = zeros(1,numLaps);
 
 firstSpikeTime = zeros(1,numLaps);
 lastSpikeTime = zeros(1,numLaps);
 
+%adjustArray = linspace(-1,1,length(numFirings));
+%adjustArray = adjustArray.*normpdf(adjustArray,0,2);
+adjustArray = ones(1,length(numFirings));
+adjustArray(1:end/2)=-1;
+
 for lap = 1:numLaps
+    
     
     %LTP = zeros(1,numCA3);    % from CA3 to CA1 neurons
     %LTD = zeros(1,numCA3);    % from CA3 to CA1 neurons
@@ -80,7 +84,9 @@ for lap = 1:numLaps
 
         %CA1 neuron current
         % adds strengths of ones that fired
-        I1 = abs(2*randn(1,1)) + sum(strength(fired));
+        % eliminated random values since we know what will go into CA1
+        % neuron
+        I1 = sum(strength(fired));
         
         %update CA3 neurons that fired
         if ~isempty(fired)
@@ -140,23 +146,30 @@ for lap = 1:numLaps
     
     if(lap<2)
     
-        figure
-        plot(numFirings)
+        %figure
+        %plot(numFirings)
         
         
     end
     
-    skewValues(lap) = skewness(strength);
+    inputSkewValues(lap) = skewness(strength.*adjustArray);
+    outputSkewValues(lap) = skewness(numFirings.*adjustArray);
+    
+    
 end
 
-figure
-plot(numFirings)
+%figure
+%plot(numFirings)
 
 %figure
 %plot(strength)
-%%
+
 figure
-plot(skewValues)
+hold on
+plot(inputSkewValues,'b-')
+plot(outputSkewValues,'r-')
+legend('Input Skewness','Output Skewness','Location','eastoutside')
+hold off
 
 %%
 
