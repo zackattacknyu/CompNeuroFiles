@@ -75,30 +75,3 @@ end
 
 
 hist(odFactor,5);
-
-
-%%
-figure
-hold on
-plot(v1weightsL(:,50));
-plot(v1weightsR(:,25));
-plot(v1weightsL(:,20));
-hold off
-
-%%
-figure
-hold on
-plot(v1Out(:,50));
-plot(v1Out(:,25));
-plot(v1Out(:,20));
-hold off
-
-%%
-
-figure
-xx = 1:100;
-g = 0.02;
-powerVals = xx.*-g;
-denomVals = 1 + exp(powerVals);
-r = 1./denomVals;
-plot(xx,r);

@@ -1,3 +1,15 @@
+%{
+This is my code for Problem 2
+
+I used the Izhikevich spiking neuron model to replicate the moments when
+the neurons spike. The STDP model is used to modify the synaptic connection
+strength as the neuron fires.
+
+
+
+%}
+
+
 
 %number of CA3 neurons
 numCA3 = 100;
@@ -166,12 +178,6 @@ plot(numInitFirings,'r-');
 plot(numFirings,'b-');
 hold off
 legend('Number of Firings before Experience','Number of Firings After Experience');
-
-%figure
-%plot(numFirings)
-
-%figure
-%plot(strength)
 
 figure
 hold on
