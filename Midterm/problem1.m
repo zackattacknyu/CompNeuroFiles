@@ -1,77 +1,70 @@
-%one neuron for left eye
-%one neuron for right eye
-%
-%100 V1 neurons
+%{
+This is my code for problem 1.
+We had neurons for the left and right eye and each neuron
+    was connected to 100 v1 neurons
+The strength of these neurons was initialized to be random numbers 
+    and then we used the Hebbian plasticity rule to update the strengths
+    depending on what the input of the neurons was
 
-%using the synaptic normalization rule
-%slide 16 of his 10-20 lecture notes
+To simulate the firings, I used a mean firing rate network heavily inspired
+    by jk_hw3_miniNet.m 
+To update the weights due to plasticity, the plasiticty rule used was 
+    the Hebbian rule in slide 16 of the 10-20 lecture notes. 
+    I used this one so that there is some
+    normalization done.
 
+I decided that the input if the eyes are open would be a constant value and
+    0 if the eyes are closed. This is because the kitten will be always be
+    looking at something when the eye is open so it makes sense that there
+    would be a constant input value. 
+Also, by making sure open eyes have a constant value and closed eyes have a
+    value of 0, the difference in OD factors will become more pronounced
+    than if open eyes had random input values. 
+%}
 
-%number of time steps
-T=100;
-
-rightNeuronInput = rand(1,1)*2*pi;
-leftNeuronInput = rand(1,1)*2*pi;
-
-rightNeuronPref = pi;
-leftNeuronPref = pi/2;
-
-numV1=100;
-v1weightsR = zeros(T+1,numV1); %weights for connections from right neuron
-v1weightsL = zeros(T+1,numV1); %weights for connections from left neuron
-
-GAIN=0.03;
-
-maxWeight=50;
-
-v1weightsR(1,:) = rand(1,numV1)*maxWeight;
-v1weightsL(1,:) = rand(1,numV1)*maxWeight;
-
-TAUW = 0.3; %learning rate
-
-%inputRight = cosTune(rightNeuronPref,rightNeuronInput);
-%inputLeft = cosTune(leftNeuronPref,leftNeuronInput);
 
 %{
-1 and 0 for sutured eyes
-1 and 1 for even ones
-Both cases will produce plots similar to 2b
+As an initial case, both kitten's eyes are open, so it gets a stream of
+    input from both eyes and this stream is equal. 
+%}
+inputRight = 0.5;
+inputLeft = 0.5;
+
+%this runs the model and obtains the OD factors
+odFactor = getODfactors(inputRight,inputLeft);
+
+figure
+hist(odFactor,5);
+title('Both eyes open OD factor graph');
+xlabel('Number of Neurons');
+ylabel('OD Category');
+
+%{
+The left eye is sutured shut, so its input is 0 while the right eye
+    has a constant stream of input of 1
 %}
 inputRight = 1;
 inputLeft = 0;
 
-avgInput = mean([inputRight inputLeft]);
-inputRFactor = (inputRight-avgInput)/TAUW;
-inputLFactor = (inputLeft-avgInput)/TAUW;
+odFactor = getODfactors(inputRight,inputLeft);
 
-odFactor = zeros(1,numV1);
-
-v1Out = zeros(T,numV1);
-for t = 1:T
-   for i = 1:numV1 
-       rightWeight = v1weightsR(t,i);
-       leftWeight = v1weightsL(t,i);
-       
-       rightResponse = rightWeight*inputRight;
-       leftResponse = leftWeight*inputLeft;
-       
-       synIn =  rightResponse+leftResponse;
-       
-       RER = sigmoidN(rightResponse,GAIN);
-       LER = sigmoidN(leftResponse,GAIN);
-       
-       odFactor(i) = (RER-LER)/(RER+LER);
-       output = sigmoidN(synIn,GAIN);
-       %synIn
-       v1Out(t,i) = output;
-       
-       %HEBB RULE HERE
-       deltaWeightR = output*inputRFactor;
-       deltaWeightL = output*inputLFactor;
-       v1weightsR(t+1,i) = rightWeight + deltaWeightR;
-       v1weightsL(t+1,i) = leftWeight + deltaWeightL;
-   end
-end
-
-
+figure
 hist(odFactor,5);
+title('Left eye sutured OD factor graph');
+xlabel('Number of Neurons');
+ylabel('OD Category');
+
+%{
+The right eye is sutured shut, so its input is 0 while the left eye
+    has a constant stream of input of 1
+%}
+inputRight = 0;
+inputLeft = 1;
+
+odFactor = getODfactors(inputRight,inputLeft);
+
+figure
+hist(odFactor,5);
+title('Right eye sutured OD factor graph');
+xlabel('Number of Neurons');
+ylabel('OD Category');

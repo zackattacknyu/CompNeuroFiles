@@ -7,6 +7,8 @@ I used the Izhikevich spiking neuron model to replicate the moments when
 the neurons spike. The STDP model is used to modify the synaptic connection
 strength as the neuron fires.
 
+A lot of inspiration was taken from the izzynet_stdp.m code.
+
 The rat moves from location i to i+1 after each time step.
 The rat does 17 laps from location 1 to 100
 When the rat is at location i, the following happens:
