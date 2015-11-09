@@ -213,32 +213,54 @@ for lap = 1:numLaps
         end
 
         %Here we exponentially decay LTD and LTP as per the STDP model
-        LTP = LTP - LTP/t_plus;
-        LTD = LTD - LTD/t_minus;
+        LTP = LTP.*(1-1/t_plus);
+        LTD = LTD.*(1-1/t_minus);
 
     end
     
+    %record firing rate in first lap
     if(lap<2)
-
         numInitFirings = numFirings;
-        
-        
     end
     
+    %record the input and output skew values
+    %   the function myskewness below has detail about how I obtained the
+    %   skewness values
     inputSkewValues(lap) = myskewness(strength);
     outputSkewValues(lap) = myskewness(numFirings);
     
 end
 
 
+%{
+This is the synpatic strength before and after the rat has moved 17 times
+    across the track.
+Before experience, the strength is a perfect Gausssian. After experience,
+    the strength of the neurons to the right of the center should be
+    greater than the strength of the neurons to the left of the center.
+%}
 figure
 hold on
 title('Strength Before and After Experience (replication of 4a)')
 plot(initStrength,'r-');
 plot(strength,'b-');
+xlabel('Step Location for Neuron');
+ylabel('Strength(nA)');
 legend('Strength Before Experience','Strength After Experience');
 hold off
 
+%{
+This is the firing rate of each neuron before and after the rat has moved
+    across the track.
+The initial firing rate is calculated after the first lap, thus each neuron
+    has a rate of 1 or 0. 
+The final firing rate is how many times each neuron fired during the entire
+    17 lap course.
+The initial firing rate should be zero everywhere except a value of 1 at
+    the center and possibly its neighbors too.
+The final firing rate should be skewed so more firing happens to the right
+    of the center than to the left.
+%}
 figure
 hold on
 title('Firing Rate Before and After Experience (replication of 4b)');
@@ -247,6 +269,13 @@ plot(numFirings,'b-');
 hold off
 legend('Number of Firings before Experience','Number of Firings After Experience');
 
+%{
+This is the graph of the input and output skewness over each lap
+    of the rat's movements
+It should start at 0 or slightly negative and keep decreasing as the rat 
+    keeps doing more laps due to the fact that the value skew more and more
+    in favor of the left side of the center.
+%}
 figure
 hold on
 title('Skewness Values (replication of 4d)');
@@ -255,7 +284,13 @@ plot(outputSkewValues,'r-')
 legend('Input Skewness','Output Skewness','Location','eastoutside')
 hold off
 
-
+%{
+This is the graph of the location of the first and last spike in each lap.
+The last spike stays relatively consistent.
+The first spike happens earlier and earlier as the rat moves due to the
+    strengthening of the connections in the synapses to the left of the
+    center.
+%}
 figure
 hold on
 title('Spike Times (replication of 4e)');
