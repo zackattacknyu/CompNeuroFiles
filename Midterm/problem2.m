@@ -245,8 +245,8 @@ title('Strength Before and After Experience (replication of 4a)')
 plot(initStrength,'r-');
 plot(strength,'b-');
 xlabel('Step Location for Neuron');
-ylabel('Strength(nA)');
-legend('Strength Before Experience','Strength After Experience');
+ylabel('Strength (nA)');
+legend('Before Experience','After Experience','Location','eastoutside');
 hold off
 
 %{
@@ -266,8 +266,11 @@ hold on
 title('Firing Rate Before and After Experience (replication of 4b)');
 plot(numInitFirings,'r-');
 plot(numFirings,'b-');
+xlabel('Step Number of Neuron');
+ylabel('Number of Times Fired');
 hold off
-legend('Number of Firings before Experience','Number of Firings After Experience');
+legend('Before Experience','After Experience',...
+    'Location','eastoutside');
 
 %{
 This is the graph of the input and output skewness over each lap
@@ -281,6 +284,8 @@ hold on
 title('Skewness Values (replication of 4d)');
 plot(inputSkewValues,'b-')
 plot(outputSkewValues,'r-')
+xlabel('Lap Number');
+ylabel('Skewness Value');
 legend('Input Skewness','Output Skewness','Location','eastoutside')
 hold off
 
@@ -296,4 +301,7 @@ hold on
 title('Spike Times (replication of 4e)');
 plot(firstSpikeTime,'b-')
 plot(lastSpikeTime,'r-')
+xlabel('Lap Number');
+ylabel('Location of Spike During Lap (neuron step)');
+legend('First Spike','Last Spike','Location','eastoutside');
 hold off
