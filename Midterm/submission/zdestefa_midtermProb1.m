@@ -6,20 +6,22 @@ We had neurons for the left and right eye and each neuron
     was connected to 100 v1 neurons
 The strength of these neurons was initialized to be random numbers 
     and then we used the Hebbian plasticity rule to update the strengths
-    depending on what the input of the neurons was
 
 To simulate the firings, I used a mean firing rate network heavily inspired
     by jk_hw3_miniNet.m 
 To update the weights due to plasticity, the plasiticty rule used was 
     the Hebbian rule in slide 16 of the 10-20 lecture notes. 
-    I used this one so that there is some
-    normalization done.
+    This one allowed for normalization, hence why I used it.
 
 I decided that the input if the eyes are open would be a constant value and
-    0 if the eyes are closed. This is because the kitten will be always be
-    looking at something when the eye is open so it makes sense that there
-    would be a constant input value. 
-Also, by making sure open eyes have a constant value and closed eyes have a
+    0 if the eyes are closed. This is done as a simplifying assumption,
+    because while what the kitten sees will change, there will be input
+    coming in from an open eye, so a constant value will ensure that the
+    open eye is being considered in each time step. Additionally, we are
+    modeling the difference between eyes being open and shut, rather than
+    the specific inputs to an eye, so it makes sense to simplify what the
+    eye sees and put the complications into the network itself. 
+Finally, by making sure open eyes have a constant value and closed eyes have a
     value of 0, the difference in OD factors will become more pronounced
     than if open eyes had random input values. 
 %}
@@ -43,7 +45,7 @@ figure
 hist(odFactor,5);
 title('Both eyes open OD factor graph');
 ylabel('Number of Neurons');
-xlabel('OD Category');
+xlabel('OD Range');
 
 %{
 The left eye is sutured shut, so its input is 0 while the right eye
@@ -55,15 +57,14 @@ inputLeft = 0;
 odFactor = getODfactors(inputRight,inputLeft);
 
 %{
-This is the OD factor graph for when the kitten has both eyes open.
-Most of the values should be on the right side since the left
-    eye was sutured shut
+This is the OD factor graph for when the kitten has the left eye shut
+Most of the values should thus be on the right side
 %}
 figure
 hist(odFactor,5);
 title('Left eye sutured OD factor graph');
 ylabel('Number of Neurons');
-xlabel('OD Category');
+xlabel('OD Range');
 
 %{
 The right eye is sutured shut, so its input is 0 while the left eye
@@ -75,15 +76,14 @@ inputLeft = 1;
 odFactor = getODfactors(inputRight,inputLeft);
 
 %{
-This is the OD factor graph for when the kitten has both eyes open.
-Most of the values should be on the left side since the right
-    eye was sutured shut
+This is the OD factor graph for when the kitten has the right eye shut
+    thus most of the values should be on the left side
 %}
 figure
 hist(odFactor,5);
 title('Right eye sutured OD factor graph');
 ylabel('Number of Neurons');
-xlabel('OD Category');
+xlabel('OD Range');
 
 function [ odFactor ] = getODfactors( inputRight,inputLeft )
 
@@ -147,7 +147,7 @@ for t = 1:T %go through each time step
        %calculates the output of the v1 neuron
        output = sigmoidN(synIn,GAIN);
        
-       %I use the Hebbian plasticity rule
+       %use the Hebbian plasticity rule
        %    to update the weights of the connection from the 
        %    right and left eye to this neuron
        deltaWeightR = output*inputRFactor;

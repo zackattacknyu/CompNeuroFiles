@@ -21,6 +21,15 @@ When the rat is at location i, the following happens:
 4) If the CA1 neuron spikes, then the LTP of all the CA3->CA1 synapses are
     updated and their LTD is reset
 
+Here is more detail on keeping track of LTP and LTD:
+We keep track of the LTP and LTD for the synapses that connect to CA1.
+When a CA3 neuron fires into CA1, this leads to LTD for that neuron
+    connection as it is a pre-synaptic spike that has occured 
+    before the CA1 has fired. The LTP values for that neuron connection are
+    thus reset. 
+When the CA1 neuron fires, this leads to LTP in all the neuron connections 
+    as there is a post-synaptic spike that has occured before the CA3 
+    neurons fired. The LTD values for all the neuron connections are then reset.
 %}
 
 %number of laps the rat will do
