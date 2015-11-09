@@ -24,20 +24,24 @@ Also, by making sure open eyes have a constant value and closed eyes have a
 
 
 %{
-As an initial case, both kitten's eyes are open, so it gets a stream of
-    input from both eyes and this stream is equal. 
+As an initial case, both kitten's eyes are open, so it gets an equal stream of
+    input from both eyes.
 %}
-inputRight = 0.5;
-inputLeft = 0.5;
+inputRight = 1;
+inputLeft = 1;
 
 %this runs the model and obtains the OD factors
 odFactor = getODfactors(inputRight,inputLeft);
 
+%{
+This is the OD factor graph for when the kitten has both eyes open.
+It should be a relatively uniform histogram.
+%}
 figure
 hist(odFactor,5);
 title('Both eyes open OD factor graph');
-xlabel('Number of Neurons');
-ylabel('OD Category');
+ylabel('Number of Neurons');
+xlabel('OD Category');
 
 %{
 The left eye is sutured shut, so its input is 0 while the right eye
@@ -48,11 +52,16 @@ inputLeft = 0;
 
 odFactor = getODfactors(inputRight,inputLeft);
 
+%{
+This is the OD factor graph for when the kitten has both eyes open.
+Most of the values should be on the right side since the left
+    eye was sutured shut
+%}
 figure
 hist(odFactor,5);
 title('Left eye sutured OD factor graph');
-xlabel('Number of Neurons');
-ylabel('OD Category');
+ylabel('Number of Neurons');
+xlabel('OD Category');
 
 %{
 The right eye is sutured shut, so its input is 0 while the left eye
@@ -63,8 +72,13 @@ inputLeft = 1;
 
 odFactor = getODfactors(inputRight,inputLeft);
 
+%{
+This is the OD factor graph for when the kitten has both eyes open.
+Most of the values should be on the left side since the right
+    eye was sutured shut
+%}
 figure
 hist(odFactor,5);
 title('Right eye sutured OD factor graph');
-xlabel('Number of Neurons');
-ylabel('OD Category');
+ylabel('Number of Neurons');
+xlabel('OD Category');
