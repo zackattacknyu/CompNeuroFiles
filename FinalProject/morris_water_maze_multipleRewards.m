@@ -1,4 +1,4 @@
-function [latency, pc, w, z] = morris_water_maze
+function [latency, pc, w, z] = morris_water_maze_multipleRewards
 
 global radius;
 global obstacle;
@@ -31,7 +31,7 @@ obstacle = [1.0 1.0];
 
 z = zeros(dirs,inx); % actor weights
 w = zeros(1,inx); % critic weights
-TRIALS = 32;
+TRIALS = 3200;
 latency = zeros(1,TRIALS);
 
 for trial = 1:TRIALS
@@ -173,6 +173,7 @@ sumprob = 0;
 
 % choose an action based on the probability distribution
 i = 1;
+act=1;
 done = 0;
 while ~done && i <= size(m,2)
     sumprob = sumprob + p(i);
