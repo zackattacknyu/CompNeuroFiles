@@ -32,15 +32,14 @@ end
 
 %reward = [0.50 -0.50];
 
-%rewards = [0.5 -0.5; -0.5 0.5];
-rewards = [0.5 -0.5; -0.5 0.5; 0 0];
+rewards = [0.5 -0.5; -0.5 0.5];
 numRewards = size(rewards,1);
 
 obstacle = [1.0 1.0];
 
 z = zeros(dirs,inx); % actor weights
 w = zeros(1,inx); % critic weights
-TRIALS = 60;
+TRIALS = 30;
 latency = zeros(1,TRIALS);
 
 for trial = 1:TRIALS
@@ -141,9 +140,11 @@ end
 %runs trials without updating weights
 %records the paths that the rat takes
 
-TRIALS2 = 50;
+TRIALS2 = 100;
 locInd=1;
 placeCellHits = zeros(size(pc.x));
+ratLocsX = zeros(1,TRIALS2*250);
+ratLocsY = zeros(1,TRIALS2*250);
 for trial = 1:TRIALS2
     
     % get rat's initial position. start each trial in a different quadrant
@@ -161,6 +162,10 @@ for trial = 1:TRIALS2
         % choose an action and move rat to new location
         act = action_select (a, beta);
         rat = move (act, rat);
+        
+        ratLocsX(locInd)=rat.x;
+        ratLocsY(locInd)=rat.y;
+        locInd = locInd+1;
         
         % save off the old critic value. calculate the new critic value
         % based on the rat's current position. calculate the actor value
@@ -201,6 +206,12 @@ for trial = 1:TRIALS2
     
     latency(trial) = t;
 end
+
+figure
+hold on
+plot(ratLocsX,ratLocsY,'b.')
+plot(rewards(:,1),rewards(:,2),'rx');
+hold off;
 %%
 
 sortedX = unique(pc.x);
