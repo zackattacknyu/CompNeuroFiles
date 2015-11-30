@@ -7,6 +7,10 @@ This means the rat appears to be there more often
 IDEA:
 Maintain different actor-critic arrays per reward center
 
+IDEA 2:
+For each trail, start at reward center and leave out starting 
+    reward center
+
 %}
 global radius;
 global obstacle;
@@ -31,8 +35,21 @@ for i = -radius:sigma/2:radius
 end
 
 %reward = [0.50 -0.50];
+rewards = [0.5 -0.5; -0.5 0.5; 0.5 0.5; -0.5 -0.5];
+%rewards = [0.5 -0.5; -0.5 0.5];
 
-rewards = [0.5 -0.5; -0.5 0.5];
+globalRewards = rewards;
+
+
+%makes random reward centers
+%{
+rewards = zeros(3,2);
+reward_r = rand(3,1)*0.8;
+reward_theta = rand(3,1)*2*pi;
+reward_complex = reward_r.*exp(reward_theta*1i);
+rewards(:,1)=real(reward_complex);
+rewards(:,2)=imag(reward_complex);
+%}
 numRewards = size(rewards,1);
 
 obstacle = [1.0 1.0];
@@ -46,6 +63,14 @@ for trial = 1:TRIALS
     
     % get rat's initial position. start each trial in a different quadrant
     rat = getInitLocation(trial);
+    
+    %{
+    curRewardNum = mod(trial,numGlobalRewards)+1;
+    ratPos = globalRewards(curRewardNum,:);
+    activeRewards = setdiff(1:numGlobalRewards,curRewardNum);
+    rewards = globalRewards(activeRewards,:);
+    rat.x = ratPos(1);rat.y = ratPos(2);
+    %}
     
     % let the rat explore for 100 time steps or until it gets reward
     t = 1;
@@ -216,7 +241,7 @@ hold off;
 
 sortedX = unique(pc.x);
 sortedY = unique(pc.y);
-thres = 100;
+thres = 10;
 placeCellMatrix = zeros(length(sortedY),length(sortedX));
 for i = 1:length(placeCellHits)
     xCur = pc.x(i);
@@ -229,7 +254,7 @@ for i = 1:length(placeCellHits)
     if(curVal>thres)
         placeCellMatrix(curRow,curCol)=curVal;
     end
-    if(curVal>100)
+    if(curVal>200)
        placeCellMatrix(curRow,curCol)=100; 
     end
 end
