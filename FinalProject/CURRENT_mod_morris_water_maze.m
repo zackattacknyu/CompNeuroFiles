@@ -1,4 +1,13 @@
+%{
+BIG ISSUE: BORDERS
+Rat can get stuck on border between regions
+    that favor different reward regions
+This means the rat appears to be there more often
 
+IDEA:
+Maintain different actor-critic arrays per reward center
+
+%}
 global radius;
 global obstacle;
 
@@ -21,34 +30,23 @@ for i = -radius:sigma/2:radius
     end
 end
 
-reward = [0.50 -0.50];
+%reward = [0.50 -0.50];
 
-rewards = [0.5 -0.5; -0.5 0.5];
+%rewards = [0.5 -0.5; -0.5 0.5];
+rewards = [0.5 -0.5; -0.5 0.5; 0 0];
 numRewards = size(rewards,1);
 
 obstacle = [1.0 1.0];
 
 z = zeros(dirs,inx); % actor weights
 w = zeros(1,inx); % critic weights
-TRIALS = 50;
+TRIALS = 60;
 latency = zeros(1,TRIALS);
 
 for trial = 1:TRIALS
     
     % get rat's initial position. start each trial in a different quadrant
-    if mod(trial,4) == 1
-        rat.x = -0.9;
-        rat.y = 0;
-    elseif mod(trial,4) == 2
-        rat.x = 0;
-        rat.y = 0.9;
-    elseif mod(trial,4) == 3
-        rat.x = 0.9;
-        rat.y = 0;
-    else
-        rat.x = 0;
-        rat.y = -0.9;
-    end
+    rat = getInitLocation(trial);
     
     % let the rat explore for 100 time steps or until it gets reward
     t = 1;
@@ -57,7 +55,7 @@ for trial = 1:TRIALS
     a = zeros(1,8);
     
     % run for 100 moves or until a reward is found. whichever comes first
-    while t <= 250 && ~found_reward;
+    while t <= 250;
         
         % choose an action and move rat to new location
         act = action_select (a, beta);
@@ -90,8 +88,9 @@ for trial = 1:TRIALS
             reward = rewards(rNum,:);
             found_reward = norm([rat.x rat.y]-reward) < 0.2;
             if(found_reward)
-               break; 
+                break
             end
+            
         end
         
         %         if found_reward
@@ -110,12 +109,11 @@ for trial = 1:TRIALS
         t = t + 1;
         
         
-        
 
     end
 
     
-    if(mod(trial,10)==0)
+    if(mod(trial,1)==0)
         %subplot(131)
         %scatter3(pc.x,pc.y,pc.act)
         %axis square;
@@ -143,25 +141,13 @@ end
 %runs trials without updating weights
 %records the paths that the rat takes
 
-TRIALS2 = 3000;
+TRIALS2 = 50;
 locInd=1;
 placeCellHits = zeros(size(pc.x));
 for trial = 1:TRIALS2
     
     % get rat's initial position. start each trial in a different quadrant
-    if mod(trial,4) == 1
-        rat.x = -0.9;
-        rat.y = 0;
-    elseif mod(trial,4) == 2
-        rat.x = 0;
-        rat.y = 0.9;
-    elseif mod(trial,4) == 3
-        rat.x = 0.9;
-        rat.y = 0;
-    else
-        rat.x = 0;
-        rat.y = -0.9;
-    end
+    rat = getInitLocation(trial);
     
     % let the rat explore for 100 time steps or until it gets reward
     t = 1;
@@ -231,6 +217,9 @@ for i = 1:length(placeCellHits)
     curVal = placeCellHits(i);
     if(curVal>thres)
         placeCellMatrix(curRow,curCol)=curVal;
+    end
+    if(curVal>100)
+       placeCellMatrix(curRow,curCol)=100; 
     end
 end
 placeCellMatrix = flipud(placeCellMatrix);
