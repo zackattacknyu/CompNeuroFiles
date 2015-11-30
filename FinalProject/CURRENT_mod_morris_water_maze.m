@@ -217,7 +217,26 @@ for trial = 1:TRIALS2
 end
 %%
 
-
+sortedX = unique(pc.x);
+sortedY = unique(pc.y);
+thres = 100;
+placeCellMatrix = zeros(length(sortedY),length(sortedX));
+for i = 1:length(placeCellHits)
+    xCur = pc.x(i);
+    yCur = pc.y(i);
+    
+    curCol = find(xCur==sortedX,1);
+    curRow = find(yCur==sortedY,1);
+    
+    curVal = placeCellHits(i);
+    if(curVal>thres)
+        placeCellMatrix(curRow,curCol)=curVal;
+    end
+end
+placeCellMatrix = flipud(placeCellMatrix);
+figure
+imagesc(placeCellMatrix);
+colorbar;
 
 
 
