@@ -2,7 +2,7 @@ function [ rat ] = getInitLocation(trial  )
 %GETINITLOCATION Summary of this function goes here
 %   Detailed explanation goes here
 
-initMag=0.1;
+initMag=0.9;
     if mod(trial,4) == 1
         rat.x = -initMag;
         rat.y = 0;

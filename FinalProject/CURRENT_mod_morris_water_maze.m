@@ -79,7 +79,7 @@ for trial = 1:TRIALS
     a = zeros(1,8);
     
     % run for 100 moves or until a reward is found. whichever comes first
-    while t <= 250;
+    while t <= 250 && ~found_reward;
         
         % choose an action and move rat to new location
         act = action_select (a, beta);
@@ -161,19 +161,38 @@ for trial = 1:TRIALS
 end
 %%
 
+subplot(121)
+scatter(pc.x,pc.y,10,'b.')
+hold on
+scatter(rat.x, rat.y,50,'ro')
+for rNum = 1:numRewards
+    reward = rewards(rNum,:);
+    scatter(reward(1),reward(2),100,'go')
+end 
+axis square;
+hold off
+subplot(122)
+vectorPlot(z,pc);
+axis square;
+drawnow;
+%%
+
 
 %runs trials without updating weights
 %records the paths that the rat takes
 
-TRIALS2 = 100;
+TRIALS2 = 10;
 locInd=1;
 placeCellHits = zeros(size(pc.x));
-ratLocsX = zeros(1,TRIALS2*250);
-ratLocsY = zeros(1,TRIALS2*250);
+ratLocsX = zeros(1,250);
+ratLocsY = zeros(1,250);
+ratPathsX = cell(1,TRIALS2);
+ratPathsY = cell(1,TRIALS2);
 for trial = 1:TRIALS2
     
     % get rat's initial position. start each trial in a different quadrant
-    rat = getInitLocation(trial);
+    %rat = getInitLocation(trial);
+    rat = getRandLocation(0.1,0.9);
     
     % let the rat explore for 100 time steps or until it gets reward
     t = 1;
@@ -182,7 +201,8 @@ for trial = 1:TRIALS2
     a = zeros(1,8);
     
     % run for 100 moves or until a reward is found. whichever comes first
-    while t <= 250 && ~found_reward;
+    locInd=1;
+    while t <= 250;
         
         % choose an action and move rat to new location
         act = action_select (a, beta);
@@ -227,6 +247,11 @@ for trial = 1:TRIALS2
 
     end
     
+    ratLocsX = ratLocsX(1:(locInd-1));
+    ratLocsY = ratLocsY(1:(locInd-1));
+    ratPathsX{trial} = ratLocsX;
+    ratPathsY{trial} = ratLocsY;
+    
     trial
     
     latency(trial) = t;
@@ -234,8 +259,10 @@ end
 
 figure
 hold on
-plot(ratLocsX,ratLocsY,'b.')
 plot(rewards(:,1),rewards(:,2),'rx');
+for i = 1:TRIALS2
+   plot(ratPathsX{i},ratPathsY{i}); 
+end
 hold off;
 %%
 
