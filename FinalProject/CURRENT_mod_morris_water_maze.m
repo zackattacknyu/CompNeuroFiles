@@ -4,12 +4,6 @@ Rat can get stuck on border between regions
     that favor different reward regions
 This means the rat appears to be there more often
 
-IDEA:
-Maintain different actor-critic arrays per reward center
-
-IDEA 2:
-For each trail, start at reward center and leave out starting 
-    reward center
 
 %}
 global radius;
@@ -26,7 +20,7 @@ eta = 0.01; % learning rate
 inx = 0;
 for i = -radius:sigma/2:radius
     for j = -radius:sigma/2:radius
-        if norm([i j]) < radius
+        if norm([i j],Inf) < radius
             inx = inx + 1;
             pc.x(inx) = i;
             pc.y(inx) = j;
@@ -35,8 +29,9 @@ for i = -radius:sigma/2:radius
 end
 
 %reward = [0.50 -0.50];
-rewards = [0.5 -0.5; -0.5 0.5; 0.5 0.5; -0.5 -0.5];
+%rewards = [0.5 -0.5; -0.5 0.5; 0.5 0.5; -0.5 -0.5];
 %rewards = [0.5 -0.5; -0.5 0.5];
+rewards = [citiesLong citiesLat];
 
 globalRewards = rewards;
 
@@ -56,7 +51,7 @@ obstacle = [1.0 1.0];
 
 z = zeros(dirs,inx); % actor weights
 w = zeros(1,inx); % critic weights
-TRIALS = 30;
+TRIALS = 50;
 latency = zeros(1,TRIALS);
 
 for trial = 1:TRIALS
@@ -164,7 +159,7 @@ end
 subplot(121)
 scatter(pc.x,pc.y,10,'b.')
 hold on
-scatter(rat.x, rat.y,50,'ro')
+%scatter(rat.x, rat.y,50,'ro')
 for rNum = 1:numRewards
     reward = rewards(rNum,:);
     scatter(reward(1),reward(2),100,'go')
@@ -181,7 +176,7 @@ drawnow;
 %runs trials without updating weights
 %records the paths that the rat takes
 
-TRIALS2 = 10;
+TRIALS2 = 50;
 locInd=1;
 placeCellHits = zeros(size(pc.x));
 ratLocsX = zeros(1,250);
@@ -256,13 +251,29 @@ for trial = 1:TRIALS2
     
     latency(trial) = t;
 end
-
+%%
 figure
+subplot(131)
+scatter(pc.x,pc.y,10,'b.')
 hold on
-plot(rewards(:,1),rewards(:,2),'rx');
+%scatter(rat.x, rat.y,50,'ro')
+for rNum = 1:numRewards
+    reward = rewards(rNum,:);
+    scatter(reward(1),reward(2),100,'go')
+end 
+axis square;
+hold off
+
+subplot(132)
+vectorPlot(z,pc);
+axis square;
+
+subplot(133)
+hold on
 for i = 1:TRIALS2
-   plot(ratPathsX{i},ratPathsY{i}); 
+   plot(ratPathsX{i},ratPathsY{i},'--'); 
 end
+plot(rewards(:,1),rewards(:,2),'rx','LineWidth',3);
 hold off;
 %%
 
