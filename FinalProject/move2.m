@@ -30,17 +30,17 @@ tmp.y = pos.y + speed*sin(dir);
 
 % check that the agent is within the boundaries of the arena. If it is not
 % randomly shift the heading slightly until it is within bounds
-if(tmp.x>radius)
-   tmp.x = speed; 
+% check that the agent is within the boundaries of the arena. If it is not
+% randomly shift the heading slightly until it is within bounds
+if norm([tmp.x tmp.y]) > radius
+    dir = dir + pi;
+    tmp.x = pos.x + speed*cos(dir);
+    tmp.y = pos.y + speed*sin(dir);
 end
-if(tmp.y>radius)
-   tmp.y = speed; 
-end
-if(tmp.x<-radius)
-   tmp.x=obstacle(1)-speed; 
-end
-if(tmp.y<-radius)
-   tmp.y=obstacle(2)-speed; 
+while norm([tmp.x tmp.y]) > radius
+    dir = dir + pi/2;
+    tmp.x = pos.x + speed*cos(dir);
+    tmp.y = pos.y + speed*sin(dir);
 end
 
 p = tmp;
