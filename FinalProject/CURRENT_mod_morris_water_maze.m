@@ -78,12 +78,15 @@ for trial = 1:TRIALS
     found_reward = 0;
     v = 0;
     a = zeros(1,8);
+    prevAct=1;
     
     % run for 100 moves or until a reward is found. whichever comes first
     while t <= 250 && ~found_reward;
         
         % choose an action and move rat to new location
         act = action_select (a, beta);
+        act = adjustAct(act,prevAct);
+        prevAct = act;
         rat = move (act, rat);
         
         % save off the old critic value. calculate the new critic value
