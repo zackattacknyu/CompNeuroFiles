@@ -16,11 +16,13 @@ sigma = 0.16; % place cell tuning width of 0.16m
 reward_value = 1;
 eta = 0.01; % learning rate
 
+
+
 % set up place cell indices across circular arena
 inx = 0;
 for i = -radius:sigma/2:radius
     for j = -radius:sigma/2:radius
-        if norm([i j],Inf) < radius
+        if norm([i j]) < radius
             inx = inx + 1;
             pc.x(inx) = i;
             pc.y(inx) = j;
@@ -32,6 +34,10 @@ end
 %rewards = [0.5 -0.5; -0.5 0.5; 0.5 0.5; -0.5 -0.5];
 %rewards = [0.5 -0.5; -0.5 0.5];
 rewards = [citiesLong citiesLat];
+%reward_vals = ones(size(rewards,1),1); %values for each reward, which decrease. 
+reward_vals = [1 1 1 1 1 1]; %values for each reward, which decrease. 
+rewardDecFactor = 0.8; %factor to decrease reward value by each time
+epsilonThresh = 0.3;
 
 globalRewards = rewards;
 
@@ -105,8 +111,12 @@ for trial = 1:TRIALS
         % if rat is within 0.2 meters of platform, give reward
         for rNum = 1:numRewards
             reward = rewards(rNum,:);
-            found_reward = norm([rat.x rat.y]-reward) < 0.2;
+            found_reward1 = norm([rat.x rat.y]-reward) < 0.2;
+            found_reward = found_reward1 && reward_vals(rNum)>epsilonThresh;
             if(found_reward)
+                reward_value = reward_vals(rNum);
+                reward_vals(rNum) = reward_vals(rNum)*rewardDecFactor;
+                reward_vals
                 break
             end
             
