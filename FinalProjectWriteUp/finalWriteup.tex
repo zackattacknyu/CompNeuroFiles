@@ -40,7 +40,7 @@
 
 
 \begin{abstract}
-NOTE: PUT DESCRIPTION OF MY PROJECT HERE
+For this project, I attempted to see what paths a rat would take if the Morris Water Maze contained multiple rewards of varying value. The inspiration for this came from the layout of cities and the transportation paths used between them. I wanted to see if a trained rat would take similar paths to the transportation networks that we see. In order to do this, I first trained the rat using the Actor-Critic Model. After training, I started the rat at random locations and recorded the paths it took to the reward centers. In the end, the paths are suboptimal thus rats should not be used for path planning. 
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
@@ -48,24 +48,14 @@ NOTE: PUT DESCRIPTION OF MY PROJECT HERE
 
 
 \section{Introduction}
-% no \IEEEPARstart
-This demo file is intended to serve as a ``starter file''
-for IEEE conference papers produced under \LaTeX\ using
-IEEEtran.cls version 1.8b and later.
-% You must have at least 2 lines in the paragraph with the drop letter
-% (should never be an issue)
-I wish you the best of success.
 
-\hfill mds
- 
-\hfill August 26, 2015
+The Morris Water Maze is one where a rat is released into a pool of water and has to learn the location of the reward center. \\
+\\
+A common model for the neuronal activity in the rat involves place cells in the hippocampus that send signals depending on the current location of the rat. The Actor-Critic Model is used to control what the optimal next move should be for the rat. \\
+\\
+A common problem is transporation planning is that there are multiple locations that all need to reach each other so there needs to be a minimal cost network that connects them all. I attempted to see if rat movements could give more insights into this problem. \\
 
-\subsection{Subsection Heading Here}
-Subsection text here.
-
-
-\subsubsection{Subsubsection Heading Here}
-Subsubsection text here.
+\section{Related Work}
 
 
 
