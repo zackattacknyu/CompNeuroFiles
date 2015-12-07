@@ -93,13 +93,19 @@ When training, the rat started from a few fixed locations. When testing, the rat
 \\
 DETAILS ON ACTOR-CRITIC MODEL TRAINING USED\\
 DETAILS ON LAYOUT AND REWARD VALUES USED\\
+\\
+I wanted to make sure that not too many trials were done during training. If too many are done, then the rat could have a heavy bias toward certain reward centers. Plus the value would diminish anyway after enough trials. Thus after each new map, I chose a new number of trials to do that training the rat well but kept the weights of the critic relatively equal across the board. \\
+\\
+One of the ways I knew the training was good was that the actor preferred directions pointed inward toward the reward centers instead of toward the walls as they had done during previous failed experiments
 
 \section{Results}
 
 One of the tradeoffs was that without sufficient training, the rat tends to hang around areas that are at an equal distance from the reward centers and cannot decide which direction to go in. \\
 \\
 FIGURES WITH THE PATH RESULTS AND LEARNED ACTOR-CRITIC VALUES\\
-INCLUDE FIGURES SHOWING CUMULATIVE DISTANCE TO THE TARGET
+INCLUDE FIGURES SHOWING CUMULATIVE DISTANCE TO THE TARGET\\
+\\
+It can be reasonably assumed that the highest capacity highway would need to be placed where the rat's activity is the greatest. Indeed, the region with a high amount of activity is around the center of the city points. 
 
 \section{Conclusion}
 Rats should not be used for path planning

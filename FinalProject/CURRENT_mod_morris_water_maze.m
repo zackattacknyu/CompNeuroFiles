@@ -36,7 +36,8 @@ end
 rewards = [citiesLong citiesLat];
 reward_vals = ones(size(rewards,1),1); %values for each reward, which decrease. 
 %reward_vals = [1 1 1 1 1 1] %values for each reward, which decrease. 
-rewardDecFactor = 0.9; %factor to decrease reward value by each time
+%rewardDecFactor = 0.9; %factor to decrease reward value by each time
+rewardDecValue = 0.1; %value to decrease reward value
 epsilonThresh = 0.2;
 
 globalRewards = rewards;
@@ -57,7 +58,7 @@ obstacle = [1.0 1.0];
 
 z = zeros(dirs,inx); % actor weights
 w = zeros(1,inx); % critic weights
-TRIALS = 30;
+TRIALS = 40;
 latency = zeros(1,TRIALS);
 
 for trial = 1:TRIALS
@@ -118,7 +119,8 @@ for trial = 1:TRIALS
             found_reward = found_reward1 && reward_vals(rNum)>epsilonThresh;
             if(found_reward)
                 reward_value = reward_vals(rNum);
-                reward_vals(rNum) = reward_vals(rNum)*rewardDecFactor;
+                %reward_vals(rNum) = reward_vals(rNum)*rewardDecFactor;
+                reward_vals(rNum) = reward_vals(rNum)-rewardDecValue;
                 reward_vals
                 break
             end
