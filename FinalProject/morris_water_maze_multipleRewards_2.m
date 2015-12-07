@@ -239,24 +239,20 @@ plot(rewards(:,1),rewards(:,2),'rx');
 hold off;
 %%
 
+placeCellInfo = w;
 sortedX = unique(pc.x);
 sortedY = unique(pc.y);
-thres = 10;
 placeCellMatrix = zeros(length(sortedY),length(sortedX));
-for i = 1:length(placeCellHits)
+for i = 1:length(placeCellInfo)
     xCur = pc.x(i);
     yCur = pc.y(i);
     
     curCol = find(xCur==sortedX,1);
     curRow = find(yCur==sortedY,1);
     
-    curVal = placeCellHits(i);
-    if(curVal>thres)
-        placeCellMatrix(curRow,curCol)=curVal;
-    end
-    if(curVal>200)
-       placeCellMatrix(curRow,curCol)=100; 
-    end
+    curVal = placeCellInfo(i);
+    placeCellMatrix(curRow,curCol)=curVal;
+
 end
 placeCellMatrix = flipud(placeCellMatrix);
 figure

@@ -34,10 +34,10 @@ end
 %rewards = [0.5 -0.5; -0.5 0.5; 0.5 0.5; -0.5 -0.5];
 %rewards = [0.5 -0.5; -0.5 0.5];
 rewards = [citiesLong citiesLat];
-%reward_vals = ones(size(rewards,1),1); %values for each reward, which decrease. 
-reward_vals = [1 1 1 1 1 1]; %values for each reward, which decrease. 
-rewardDecFactor = 0.8; %factor to decrease reward value by each time
-epsilonThresh = 0.3;
+reward_vals = ones(size(rewards,1),1); %values for each reward, which decrease. 
+%reward_vals = [1 1 1 1 1 1] %values for each reward, which decrease. 
+rewardDecFactor = 0.9; %factor to decrease reward value by each time
+epsilonThresh = 0.2;
 
 globalRewards = rewards;
 
@@ -57,7 +57,7 @@ obstacle = [1.0 1.0];
 
 z = zeros(dirs,inx); % actor weights
 w = zeros(1,inx); % critic weights
-TRIALS = 50;
+TRIALS = 30;
 latency = zeros(1,TRIALS);
 
 for trial = 1:TRIALS
@@ -288,3 +288,25 @@ for i = 1:TRIALS2
 end
 plot(rewards(:,1),rewards(:,2),'rx','LineWidth',3);
 hold off;
+
+%%
+
+placeCellInfo = w;
+sortedX = unique(pc.x);
+sortedY = unique(pc.y);
+placeCellMatrix = zeros(length(sortedY),length(sortedX));
+for i = 1:length(placeCellInfo)
+    xCur = pc.x(i);
+    yCur = pc.y(i);
+    
+    curCol = find(xCur==sortedX,1);
+    curRow = find(yCur==sortedY,1);
+    
+    curVal = placeCellInfo(i);
+    placeCellMatrix(curRow,curCol)=curVal;
+
+end
+placeCellMatrix = flipud(placeCellMatrix);
+figure
+imagesc(placeCellMatrix);
+colorbar;

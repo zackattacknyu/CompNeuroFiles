@@ -40,7 +40,7 @@
 
 
 \begin{abstract}
-For this project, I attempted to see what paths a rat would take if the Morris Water Maze contained multiple rewards of varying value. The inspiration for this came from the layout of cities and the transportation paths used between them. I wanted to see if a trained rat would take similar paths to the transportation networks that we see. In order to do this, I first trained the rat using the Actor-Critic Model. After training, I started the rat at random locations and recorded the paths it took to the reward centers. In the end, the paths are suboptimal thus rats should not be used for path planning. 
+For this project, I attempted to see what paths a rat would take if the Morris Water Maze contained multiple rewards of varying value. The inspiration for this project was the layout of cities and the transportation networks used to connect them. I hoped to observe if a trained rat would use paths that look similar to those transportation networks. In order to do this, I trained the rat using hippocampal place cells that learn via temporal difference learning in the actor-critic model. After training, I started the rat at random locations and recorded the paths it took to the reward centers. In the end, the paths are suboptimal thus rats should not be used for path planning. 
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
@@ -49,7 +49,7 @@ For this project, I attempted to see what paths a rat would take if the Morris W
 
 \section{Introduction}
 
-The Morris Water Maze is one where a rat is released into a pool of water and has to learn the location of the reward center. \\
+The Morris Water Maze is one where a rat is released into a pool of water and searches for a platform which will provide relief from having to swim. The platform is thus considered a reward in the brain of the rat. Due to the constant location of these platforms, it is optimal for the rat to learn this location and it is desirable for us to model this learning.\\
 \\
 A common model for the neuronal activity in the rat involves place cells in the hippocampus that send signals depending on the current location of the rat. The Actor-Critic Model is used to control what the optimal next move should be for the rat. \\
 \\
@@ -68,20 +68,36 @@ In this paper, **THE ROBOT**, they model a robot's movement via DA-STDP. While t
 
 \subsection{Slime Mode Interstates}
 
-There was work done with slime molds and they were able to model the interstate highway system
+There was work done where food was placed at the location of the 20 largest cities in the United States and then slime mold was released. The paths sketched out by the slime mold ended up being similar to the interstate highway system. This is a great example of how the aggregate of simple actions taken by a biological organism can yield useful results. My goal with the rat experiment was to see if we would get useful results taking the aggregate of the paths it takes after learning. 
 
-\subsection{Shortest Paths in GIS}
-
-In the field of GIS, finding the shortest path across terrain is a common problem. Additionally, finding the best route between cities is another common one. INSERT CITATIONS FOR PAPERS HERE
 
 \section{Experiment Design}
 
-I trained the rat\\
+The rat moves around a circular maze. Thus for my experiments there is a "rat" which has a discrete location. At any given moment, I made sure it is only allowed to continue walking in its direction or change its direction by 45 degrees. This is to more realistically model the momentum of the rat. Additionally, when it hits the wall of the maze, it "bounces off" in that the direction changes by 180 degrees.\\
+\\
+I trained the rat using temporal difference learning that is implemented via an actor-critic model. \\
+\\
+For the reward center locations, I used basic locations to start off and then used locations inspired by the cities in the United States and Europe. \\
+\\
+In order to have well placed cities, for my United States map, I used New York, Chicago, Los Angeles, Atlanta, and Denver. I found their latitude and longitude coordinates and plotted them on a 2D plane, rescaling for the water maze. \\
+\\
+For the Europe map, I used Paris, London, Warsaw, Berlin, and Vienna. I again used their latitude and longitude coordinates and put that on a 2D plane, rescaling as necessary. \\
+\\
+I used two models for rewards: constant rewards and diminishing rewards. In the constant reward model, every reward center gave the same amount and it did not diminish. In other model, the reward value diminished by a factor of 0.9 and it was not considered a reward if the value fell below 0.3. \\
+\\
+I also had the rewards diminish by a constant value until it fell below a threshold. **IMPLEMENT THIS**
+\\
+I had maps where every reward started with the same value and maps where they were different, with the differences being motivated by population of the cities. **IMPLEMENT THIS AND PUT RESULTS LATER**
+\\
+When training, the rat started from a few fixed locations. When testing, the rat would start at random locations. \\
+\\
 DETAILS ON ACTOR-CRITIC MODEL TRAINING USED\\
 DETAILS ON LAYOUT AND REWARD VALUES USED\\
 
 \section{Results}
 
+One of the tradeoffs was that without sufficient training, the rat tends to hang around areas that are at an equal distance from the reward centers and cannot decide which direction to go in. \\
+\\
 FIGURES WITH THE PATH RESULTS AND LEARNED ACTOR-CRITIC VALUES\\
 INCLUDE FIGURES SHOWING CUMULATIVE DISTANCE TO THE TARGET
 

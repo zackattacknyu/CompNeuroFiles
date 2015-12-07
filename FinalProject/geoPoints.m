@@ -32,12 +32,19 @@ citiesLatLong = [...
 %}
 
 citiesLatLong = [...
+    52.366667,4.9;
+48.133333,11.566667;
+48.2,16.366667;
+52.233333,21.016667];
+
+%{
+citiesLatLong = [...
 40.728333,-73.994167;
 41.836944,-87.684722;
 34.05,-118.25;
 47.609722,-122.333056;
 33.755,-84.39];
-
+%}
 citiesLat = citiesLatLong(:,1);
 citiesLong = citiesLatLong(:,2);
 
@@ -54,7 +61,7 @@ citiesLat = citiesLat-0.5*(max(citiesLat)-min(citiesLat));
 citiesLong = 2*citiesLong;
 citiesLong = citiesLong-0.5*(max(citiesLong)-min(citiesLong));
 
-shrink = 0.5; %ensures that reward center is not at exact edge
+shrink = 0.7; %ensures that reward center is not at exact edge
 citiesLat = citiesLat.*shrink;
 citiesLong = citiesLong.*shrink;
 
