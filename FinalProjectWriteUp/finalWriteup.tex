@@ -2,7 +2,7 @@
 
 \documentclass[conference]{IEEEtran}
 
-
+\usepackage{graphicx,color}
 \ifCLASSINFOpdf
   % \usepackage[pdftex]{graphicx}
   % declare the path(s) where your graphic files are
@@ -97,7 +97,7 @@ In order to have well placed cities, for my United States map, I used New York, 
 \subsection{Rat Testing}
 
 Once the rat was trained, I recorded the paths it takes when released back into the maze. The rat movement was exactly the same as during training except that the actor and critic values were left unchanged. The rat also started at random locations in the maze. In order to model a random location, I used polar coordinates and chose random $\theta$ and $r$ values that are within the realm of the circle and then converted the $(r,\theta)$ pair to its corresponding $(x,y)$ pair. 
-
+**MENTION THAT RAT MIGHT NOT STOP AT REWARD CENTERS**
 
 
 \section{Results}
@@ -107,10 +107,35 @@ One of the tradeoffs was that without sufficient training, the rat tends to hang
 FIGURES WITH THE PATH RESULTS AND LEARNED ACTOR-CRITIC VALUES\\
 INCLUDE FIGURES SHOWING CUMULATIVE DISTANCE TO THE TARGET\\
 \\
-It can be reasonably assumed that the highest capacity highway would need to be placed where the rat's activity is the greatest. Indeed, the region with a high amount of activity is around the center of the city points. 
+It can be reasonably assumed that the highest capacity highway would need to be placed where the rat's activity is the greatest. Indeed, the region with a high amount of activity is around the center of the city points. \\
+\\
+For figure **INSERT REF**, I used the cities of Berlin, Vienna, and Warsaw as my model for the reward center locations. During the testing phase, the rat moves toward one of the cities and also travels around the area between the cities. The interesting thing is that if you take the areas in the figure where the path lines are densest, then it could almost make a path that would make sense as travel routes between the cities. 
+**MENTION DEPRECIATION METHOD USED FOR THIS ONE**
+
+\begin{figure}
+\includegraphics[width=0.4\textwidth]{waterMazeRevised2_Figure.png} 
+\caption{Place Cell and Reward Center Locations (top). Actor Gradient (middle). Paths traversed by rat with reward centers in red (bottom)}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=0.4\textwidth]{waterMazeRevised2_Critic.png} 
+\caption{Critic Values in Maze}
+\end{figure}
+
+For figure **INSERT REF**, I used the cities of New York, Chicago, Los Angeles, Seattle, and Atlanta. After training, the rat had relatively good actor gradient directions. When charting all the paths the rat took, there is a high density in the middle area between all the cities which would coincide with where we would want a road to be to go between all the cities. 
+
+\begin{figure}
+\includegraphics[width=0.4\textwidth]{waterMazeRevisedD_Figure.png} 
+\caption{Place Cell and Reward Center Locations (top). Actor Gradient (middle). Paths traversed by rat with reward centers in red (bottom)}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=0.4\textwidth]{waterMazeRevisedD_Critic.png} 
+\caption{Critic Values in Maze}
+\end{figure}
 
 \section{Conclusion}
-Rats should not be used for path planning
+Rats should not be used for path planning. It was quite difficult getting the model to overcome adverse behaviors and even then, the paths taken were not terribly informative. Additionally, more efficient paths could easily be found. The hope with this project was that the actor-critic model would find compromise directions for each place cell and after enough training, you could use the actor cells to map out efficient paths all around the maze, either to the cities or between cities. 
 
 
 \begin{thebibliography}{1}

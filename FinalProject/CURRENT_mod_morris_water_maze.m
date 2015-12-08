@@ -37,7 +37,7 @@ rewards = [citiesLong citiesLat];
 reward_vals = ones(size(rewards,1),1); %values for each reward, which decrease. 
 %reward_vals = [1 1 1 1 1 1] %values for each reward, which decrease. 
 %rewardDecFactor = 0.9; %factor to decrease reward value by each time
-rewardDecValue = 0.075; %value to decrease reward value
+rewardDecValue = 0.1; %value to decrease reward value
 epsilonThresh = 0.3;
 
 globalRewards = rewards;
@@ -89,7 +89,7 @@ for trial = 1:TRIALS
         act = action_select (a, beta);
         act = adjustAct(act,prevAct);
         prevAct = act;
-        rat = move (act, rat);
+        rat = move2(act, rat);
         
         % save off the old critic value. calculate the new critic value
         % based on the rat's current position. calculate the actor value
@@ -215,13 +215,13 @@ for trial = 1:TRIALS2
     
     % run for 100 moves or until a reward is found. whichever comes first
     locInd=1;
-    while t <= 250 && ~found_reward;
+    while t <= 250;
         
         % choose an action and move rat to new location
         act = action_select (a, beta);
         act = adjustAct(act,prevAct);
         prevAct = act;
-        rat = move (act, rat);
+        rat = move2(act, rat);
         
         ratLocsX(locInd)=rat.x;
         ratLocsY(locInd)=rat.y;
@@ -270,7 +270,7 @@ for trial = 1:TRIALS2
 end
 %%
 figure
-subplot(131)
+subplot(311)
 scatter(pc.x,pc.y,10,'b.')
 hold on
 %scatter(rat.x, rat.y,50,'ro')
@@ -281,7 +281,7 @@ end
 axis square;
 hold off
 
-subplot(132)
+subplot(312)
 vectorPlot(z,pc);
 axis square;
 
@@ -292,7 +292,7 @@ co = [0    0.4470    0.7410;
     0.4660    0.6740    0.1880;
     0.3010    0.7450    0.9330;
     0.6350    0.0780    0.1840];
-subplot(133)
+subplot(313)
 hold on
 for i = 1:TRIALS2
     colorRow = mod(i,size(co,1))+1;

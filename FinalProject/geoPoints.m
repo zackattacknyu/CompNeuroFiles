@@ -37,7 +37,7 @@ allCities = [
 48.2,16.366667;
 52.233333,21.016667];
 
-citiesToInclude = [2 3 4];
+citiesToInclude = [7 8 10 9 11];
 citiesLatLong = allCities(citiesToInclude,:);
 
 citiesLat = citiesLatLong(:,1);
