@@ -1,6 +1,7 @@
 %{
 This gets us the geographical points for our cities
 Found though link on wikipedia to geographical coordinates
+Coordinates in signed degrees format
 
 1. New York: 40.728333,-73.994167
 2. Chicago: 41.836944,-87.684722

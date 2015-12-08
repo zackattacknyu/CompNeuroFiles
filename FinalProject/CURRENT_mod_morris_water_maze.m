@@ -127,10 +127,6 @@ for trial = 1:TRIALS
             
         end
         
-        %         if found_reward
-        %             disp(['Found reward at time ', num2str(t), ' on trial ', num2str(trial)])
-        %         end
-        
         % get TD delta rule
         d = delta2(v, vpre, reward_value * found_reward);
         
