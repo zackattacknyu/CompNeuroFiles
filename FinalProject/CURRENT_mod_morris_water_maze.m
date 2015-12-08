@@ -37,8 +37,8 @@ rewards = [citiesLong citiesLat];
 reward_vals = ones(size(rewards,1),1); %values for each reward, which decrease. 
 %reward_vals = [1 1 1 1 1 1] %values for each reward, which decrease. 
 %rewardDecFactor = 0.9; %factor to decrease reward value by each time
-rewardDecValue = 0.1; %value to decrease reward value
-epsilonThresh = 0.2;
+rewardDecValue = 0.075; %value to decrease reward value
+epsilonThresh = 0.3;
 
 globalRewards = rewards;
 
@@ -58,7 +58,7 @@ obstacle = [1.0 1.0];
 
 z = zeros(dirs,inx); % actor weights
 w = zeros(1,inx); % critic weights
-TRIALS = 40;
+TRIALS = 60;
 latency = zeros(1,TRIALS);
 
 for trial = 1:TRIALS
@@ -145,6 +145,11 @@ for trial = 1:TRIALS
         
 
     end
+    
+    %if there are no more rewards for the rat
+    if(isempty(find(reward_vals>epsilonThresh, 1)))
+        break;
+    end
 
     
     if(mod(trial,1)==0)
@@ -209,13 +214,16 @@ for trial = 1:TRIALS2
     found_reward = 0;
     v = 0;
     a = zeros(1,8);
+    prevAct=1;
     
     % run for 100 moves or until a reward is found. whichever comes first
     locInd=1;
-    while t <= 250;
+    while t <= 250 && ~found_reward;
         
         % choose an action and move rat to new location
         act = action_select (a, beta);
+        act = adjustAct(act,prevAct);
+        prevAct = act;
         rat = move (act, rat);
         
         ratLocsX(locInd)=rat.x;
@@ -237,10 +245,7 @@ for trial = 1:TRIALS2
                 a(j) = a(j) + z(j,i)*pc.act(i);
             end
         end
-        
-        [~,placeCellInd] = max(pc.act);
-        placeCellHits(placeCellInd) = placeCellHits(placeCellInd)+1;
-        
+
         % if rat is within 0.2 meters of platform, give reward
         for rNum = 1:numRewards
             reward = rewards(rNum,:);
@@ -283,10 +288,18 @@ subplot(132)
 vectorPlot(z,pc);
 axis square;
 
+co = [0    0.4470    0.7410;
+    0.8500    0.3250    0.0980;
+    0.9290    0.6940    0.1250;
+    0.4940    0.1840    0.5560;
+    0.4660    0.6740    0.1880;
+    0.3010    0.7450    0.9330;
+    0.6350    0.0780    0.1840];
 subplot(133)
 hold on
 for i = 1:TRIALS2
-   plot(ratPathsX{i},ratPathsY{i},'--'); 
+    colorRow = mod(i,size(co,1))+1;
+   plot(ratPathsX{i},ratPathsY{i},'--','Color',co(colorRow,:)); 
 end
 plot(rewards(:,1),rewards(:,2),'rx','LineWidth',3);
 hold off;
@@ -311,4 +324,7 @@ end
 placeCellMatrix = flipud(placeCellMatrix);
 figure
 imagesc(placeCellMatrix);
+hold on
+plot(rewards(:,1),rewards(:,2),'rx','LineWidth',3);
+hold off
 colorbar;
