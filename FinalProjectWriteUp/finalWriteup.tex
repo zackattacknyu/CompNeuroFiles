@@ -53,7 +53,7 @@ The Morris Water Maze is one where a rat is released into a pool of water and se
 \\
 A common model for the neuronal activity in the rat involves place cells in the hippocampus that send signals depending on the current location of the rat. The Actor-Critic Model is used to control what the optimal next move should be for the rat. \\
 \\
-A common problem is transporation planning is that there are multiple locations that all need to reach each other so there needs to be a minimal cost network that connects them all. I attempted to see if rat movements could give more insights into this problem. \\
+A common problem is transportation planning is that there are multiple locations that all need to reach each other so there needs to be a minimal cost network that connects them all. I attempted to see if rat movements could give more insights into this problem. \\
 
 \section{Related Work}
 
@@ -131,6 +131,30 @@ For figure **INSERT REF**, I used the cities of New York, Chicago, Los Angeles, 
 
 \begin{figure}
 \includegraphics[width=0.4\textwidth]{waterMazeRevisedD_Critic.png} 
+\caption{Critic Values in Maze}
+\end{figure}
+
+For figures **INSERT REF**, I used the European cities but changed their initial reward values based on their population. 
+
+\begin{figure}
+\includegraphics[width=0.4\textwidth]{waterMazeRevised2_Figure_populationRewards.png} 
+\caption{Place Cell and Reward Center Locations (top). Actor Gradient (middle). Paths traversed by rat with reward centers in red (bottom)}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=0.4\textwidth]{waterMazeRevised2_Critic_populationRewards.png} 
+\caption{Critic Values in Maze}
+\end{figure}
+
+For figures **INSERT REF**, I used the American cities but changed their initial reward values based on their population. 
+
+\begin{figure}
+\includegraphics[width=0.4\textwidth]{waterMazeRevisedD_Figure_populationRewards.png} 
+\caption{Place Cell and Reward Center Locations (top). Actor Gradient (middle). Paths traversed by rat with reward centers in red (bottom)}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=0.4\textwidth]{waterMazeRevisedD_Critic_populationRewards.png} 
 \caption{Critic Values in Maze}
 \end{figure}
 

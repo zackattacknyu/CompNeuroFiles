@@ -37,8 +37,29 @@ allCities = [
 48.2,16.366667;
 52.233333,21.016667];
 
-citiesToInclude = [7 8 10 9 11];
+allCitiesPop=[
+    8.5;
+    2.7;
+    3.9
+    0.6;
+    0.5;
+    0.6;
+    0.8;
+    3.56;
+    1.26;
+    2.24;
+    1.4;
+    1.8;
+    1.7];
+
+%citiesToInclude = [1 2 3 4 5]; %for D
+citiesToInclude = [8 12 13]; %for 2
 citiesLatLong = allCities(citiesToInclude,:);
+citiesPop = allCitiesPop(citiesToInclude);
+
+%gets reward values based on population
+citiesRew = (citiesPop-min(citiesPop))./(max(citiesPop)-min(citiesPop));
+citiesRew = citiesRew./2 + 0.5;
 
 citiesLat = citiesLatLong(:,1);
 citiesLong = citiesLatLong(:,2);
@@ -56,7 +77,7 @@ citiesLat = citiesLat-0.5*(max(citiesLat)-min(citiesLat));
 citiesLong = 2*citiesLong;
 citiesLong = citiesLong-0.5*(max(citiesLong)-min(citiesLong));
 
-shrink = 0.8; %ensures that reward center is not at exact edge
+shrink = 0.5; %ensures that reward center is not at exact edge
 citiesLat = citiesLat.*shrink;
 citiesLong = citiesLong.*shrink;
 

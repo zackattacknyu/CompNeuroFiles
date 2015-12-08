@@ -34,10 +34,11 @@ end
 %rewards = [0.5 -0.5; -0.5 0.5; 0.5 0.5; -0.5 -0.5];
 %rewards = [0.5 -0.5; -0.5 0.5];
 rewards = [citiesLong citiesLat];
-reward_vals = ones(size(rewards,1),1); %values for each reward, which decrease. 
+reward_vals = citiesRew;
+%reward_vals = ones(size(rewards,1),1); %values for each reward, which decrease. 
 %reward_vals = [1 1 1 1 1 1] %values for each reward, which decrease. 
-%rewardDecFactor = 0.9; %factor to decrease reward value by each time
-rewardDecValue = 0.1; %value to decrease reward value
+rewardDecFactor = 0.9; %factor to decrease reward value by each time
+%rewardDecValue = 0.075; %value to decrease reward value
 epsilonThresh = 0.3;
 
 globalRewards = rewards;
@@ -59,7 +60,7 @@ obstacle = [1.0 1.0];
 z = zeros(dirs,inx); % actor weights
 w = zeros(1,inx); % critic weights
 
-TRIALS = 60;
+TRIALS =20;
 latency = zeros(1,TRIALS);
 
 for trial = 1:TRIALS
@@ -120,8 +121,8 @@ for trial = 1:TRIALS
             found_reward = found_reward1 && reward_vals(rNum)>epsilonThresh;
             if(found_reward)
                 reward_value = reward_vals(rNum);
-                %reward_vals(rNum) = reward_vals(rNum)*rewardDecFactor;
-                reward_vals(rNum) = reward_vals(rNum)-rewardDecValue;
+                reward_vals(rNum) = reward_vals(rNum)*rewardDecFactor;
+                %reward_vals(rNum) = reward_vals(rNum)-rewardDecValue;
                 reward_vals
                 break
             end
@@ -193,7 +194,7 @@ drawnow;
 %runs trials without updating weights
 %records the paths that the rat takes
 
-TRIALS2 = 50;
+TRIALS2 = 7;
 locInd=1;
 placeCellHits = zeros(size(pc.x));
 ratLocsX = zeros(1,250);
@@ -215,7 +216,7 @@ for trial = 1:TRIALS2
     
     % run for 100 moves or until a reward is found. whichever comes first
     locInd=1;
-    while t <= 250;
+    while t <= 100;
         
         % choose an action and move rat to new location
         act = action_select (a, beta);
