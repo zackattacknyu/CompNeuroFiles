@@ -73,6 +73,12 @@ There was work done where food was placed at the location of the 20 largest citi
 
 \section{Experiment Design}
 
+\subsection{Rat Movements}
+
+For the real experiments there would be a rat moving around a circular pool. I thus had a "rat" with an x-y location moving around a circle. In my model, the rat has place cells in its hippo-campus and each of the place cells has a preferred location in the circle. Each place cell feeds into a critic cell as well as 8 actor cells. The place cell location, responses by the actor and critic cells, and final direction chosen by the rat was determined using the model specified in Foster et al **INSERT CITATION**. \\
+\\
+There were two important things to consider when modeling the rat's movements: how much it changes direction and what to do if it hits the wall. For simplification, I assumed that a rat "bounces off" a wall if it hits it. This means that I had $\pi$ radians to its direction of movement in order to reverse it. 
+
 The rat moves around a circular maze. Thus for my experiments there is a "rat" which has a discrete location. At any given moment, I made sure it is only allowed to continue walking in its direction or change its direction by 45 degrees. This is to more realistically model the momentum of the rat. Additionally, when it hits the wall of the maze, it "bounces off" in that the direction changes by 180 degrees.\\
 \\
 I trained the rat using temporal difference learning that is implemented via an actor-critic model. \\
