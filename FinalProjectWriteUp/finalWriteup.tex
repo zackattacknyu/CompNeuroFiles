@@ -77,32 +77,28 @@ There was work done where food was placed at the location of the 20 largest citi
 
 For the real experiments there would be a rat moving around a circular pool. I thus had a "rat" with an x-y location moving around a circle. In my model, the rat has place cells in its hippo-campus and each of the place cells has a preferred location in the circle. Each place cell feeds into a critic cell as well as 8 actor cells. The place cell location, responses by the actor and critic cells, and final direction chosen by the rat was determined using the model specified in Foster et al **INSERT CITATION**. \\
 \\
-There were two important things to consider when modeling the rat's movements: how much it changes direction and what to do if it hits the wall. For simplification, I assumed that a rat "bounces off" a wall if it hits it. This means that I had $\pi$ radians to its direction of movement in order to reverse it. 
+There were two important things to consider when modeling the rat's movements: how much it changes direction and what to do if it hits the wall. For simplification, I assumed that a rat "bounces off" a wall if it hits it. This means that I had $\pi$ radians to its direction of movement in order to reverse it. When doing this, it is possible that if the rat hits the wall from a certain angle and is at the right location, then it could keep bouncing forever. **INSERT PICTURE**. If the rat failed to be at a proper location after "bouncing" then I change its direction by $\frac{\pi}{2}$ radians in order to prevent this from occurring. \\
+\\
+The other thing to consider is how much the rat's direction is allowed to change in each time step. Here I deviated from the design in Foster **INSERT CITATION** and chose my own method. I assumed that in each time step, the rat has only three choices: continue traveling in the same direction, move slightly to the left, or move slightly to right. Traveling in the same direction means that the angle of movement stays constant. Moving slightly to the left means that the angle increases by $\frac{\pi}{4}$ radians. Moving slightly to the right means the angle decreases by $\frac{\pi}{4}$ radians. In order to determine the rat's next move, I shifted the coordinate system so that the previous angle was the positive x-direction. If the vector representing the next angle had a positive y-value then I had the rat move slightly to the left. If the vector had a negative y-value then the rat moved slightly to the right.
 
-The rat moves around a circular maze. Thus for my experiments there is a "rat" which has a discrete location. At any given moment, I made sure it is only allowed to continue walking in its direction or change its direction by 45 degrees. This is to more realistically model the momentum of the rat. Additionally, when it hits the wall of the maze, it "bounces off" in that the direction changes by 180 degrees.\\
+\subsection{Rat Training and Rewards}
+
+In order to train the rat, I followed the procedure used in Foster **INSERT CITATION** and used many parts of the morris\_water\_maze.m code. In each trial, the rat was released in one of 4 locations and then "moved" (as described above) until it found a reward center or 250 time steps had passed, whichever came first. Once the reward center was found, the actor critic values were updated. Unlike in Foster **INSERT CITATION**, I had multiple reward centers. Initially they all gave a reward of 1.\\
 \\
-I trained the rat using temporal difference learning that is implemented via an actor-critic model. \\
+In order to model foraging behavior, their reward value decreased by a constant amount each time the rat reached it. The reward center was not used once the value fell below a certain threshold. The rat was trained until a certain number of trials occurred or all the rewards had been spent, whichever came first. \\
 \\
+In order to see if there would be an effect if we modeled the fact that cities have different populations, I also ran trials where the initial reward values were different **IMPLEMENT THIS AND SHOW FIGURES**. I took the population values and did a rescale and shift so that they fell between 0.5 and 1. 
+
+\subsection{Reward Center Locations}
 For the reward center locations, I used basic locations to start off and then used locations inspired by the cities in the United States and Europe. \\
 \\
-In order to have well placed cities, for my United States map, I used New York, Chicago, Los Angeles, Atlanta, and Denver. I found their latitude and longitude coordinates and plotted them on a 2D plane, rescaling for the water maze. \\
-\\
-For the Europe map, I used Paris, London, Warsaw, Berlin, and Vienna. I again used their latitude and longitude coordinates and put that on a 2D plane, rescaling as necessary. \\
-\\
-I used two models for rewards: constant rewards and diminishing rewards. In the constant reward model, every reward center gave the same amount and it did not diminish. In other model, the reward value diminished by a factor of 0.9 and it was not considered a reward if the value fell below 0.3. \\
-\\
-I also had the rewards diminish by a constant value until it fell below a threshold. **IMPLEMENT THIS**
-\\
-I had maps where every reward started with the same value and maps where they were different, with the differences being motivated by population of the cities. **IMPLEMENT THIS AND PUT RESULTS LATER**
-\\
-When training, the rat started from a few fixed locations. When testing, the rat would start at random locations. \\
-\\
-DETAILS ON ACTOR-CRITIC MODEL TRAINING USED\\
-DETAILS ON LAYOUT AND REWARD VALUES USED\\
-\\
-I wanted to make sure that not too many trials were done during training. If too many are done, then the rat could have a heavy bias toward certain reward centers. Plus the value would diminish anyway after enough trials. Thus after each new map, I chose a new number of trials to do that training the rat well but kept the weights of the critic relatively equal across the board. \\
-\\
-One of the ways I knew the training was good was that the actor preferred directions pointed inward toward the reward centers instead of toward the walls as they had done during previous failed experiments
+In order to have well placed cities, for my United States map, I used New York, Chicago, Los Angeles, Atlanta, and Denver. For the Europe map, I used Paris, London, Warsaw, Berlin, and Vienna. I found their latitude and longitude coordinates in signed degrees format and plotted them on a 2D plane, rescaling for the water maze. I made sure to vary which particular set of cities I chose in a given trial. 
+
+\subsection{Rat Testing}
+
+Once the rat was trained, I recorded the paths it takes when released back into the maze. The rat movement was exactly the same as during training except that the actor and critic values were left unchanged. The rat also started at random locations in the maze. In order to model a random location, I used polar coordinates and chose random $\theta$ and $r$ values that are within the realm of the circle and then converted the $(r,\theta)$ pair to its corresponding $(x,y)$ pair. 
+
+
 
 \section{Results}
 

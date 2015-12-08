@@ -1,23 +1,24 @@
 %{
 This gets us the geographical points for our cities
 Found though link on wikipedia to geographical coordinates
+Population data from wikipedia
 Coordinates in signed degrees format
 
-1. New York: 40.728333,-73.994167
-2. Chicago: 41.836944,-87.684722
-3. Los Angeles: 34.05,-118.25
-4. Seattle: 47.609722,-122.333056
-5. Atlanta: 33.755,-84.39
-6. Denver: 39.76185,-104.881105
+1. New York: 40.728333,-73.994167; 8.5 million
+2. Chicago: 41.836944,-87.684722; 2.7 million
+3. Los Angeles: 34.05,-118.25; 3.9 million
+4. Seattle: 47.609722,-122.333056; 0.6 million
+5. Atlanta: 33.755,-84.39; 0.5 million
+6. Denver: 39.76185,-104.881105; 0.6 million
 
 
-7. Amsterdam: 52.366667,4.9
-8. Berlin: 52.516667,13.383333
-9. Prague: 50.083333,14.416667
-10. Paris: 48.8567,2.3508
-11. Munich: 48.133333,11.566667
-12. Vienna: 48.2,16.366667
-13. Warsaw: 52.233333,21.016667
+7. Amsterdam: 52.366667,4.9; 0.8 million
+8. Berlin: 52.516667,13.383333; 3.56 million
+9. Prague: 50.083333,14.416667; 1.26 million
+10. Paris: 48.8567,2.3508; 2.24 million
+11. Munich: 48.133333,11.566667; 1.4 million
+12. Vienna: 48.2,16.366667; 1.8 million
+13. Warsaw: 52.233333,21.016667; 1.7 million
 
 %}
 
@@ -36,7 +37,7 @@ allCities = [
 48.2,16.366667;
 52.233333,21.016667];
 
-citiesToInclude = [1 3 4];
+citiesToInclude = [2 3 4];
 citiesLatLong = allCities(citiesToInclude,:);
 
 citiesLat = citiesLatLong(:,1);

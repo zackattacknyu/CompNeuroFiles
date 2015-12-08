@@ -30,7 +30,7 @@ for i = -radius:sigma/2:radius
     end
 end
 
-%reward = [0.50 -0.50];
+%rewards = [0.50 -0.50];
 %rewards = [0.5 -0.5; -0.5 0.5; 0.5 0.5; -0.5 -0.5];
 %rewards = [0.5 -0.5; -0.5 0.5];
 rewards = [citiesLong citiesLat];
@@ -58,6 +58,7 @@ obstacle = [1.0 1.0];
 
 z = zeros(dirs,inx); % actor weights
 w = zeros(1,inx); % critic weights
+
 TRIALS = 60;
 latency = zeros(1,TRIALS);
 
