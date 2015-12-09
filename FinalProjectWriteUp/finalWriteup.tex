@@ -71,9 +71,7 @@ Another model that has been proposed in the literature to simulate reinforcement
 \\
 In a paper by Skorkheim et al **PLOS ONE PAPER**, they model an actor foraging for food using DA-STDP. As it turns out, DA-STDP can be used to model the behavior effectively, however you have to impose additional constraints related to maintaining synaptic homeostasis in order for it to be effective. A similar experiment was done by Evans et al **ROBOT PAPER**, where he modeled the movement of a robot foraging for food in an environment. \\
 \\
-These papers indicate that it may be possible to use DA-STDP to model the rat's behavior in my environment. However, there are two key differences between my set-up and those papers. First, in my experiment, the input is place cells thus the rat knows its global location. In those papers, the input is the immediate environment around the actor at a given point. The second major difference is that both experiments have many food items spread around the environment and it does not matter which food items the actor receives. For my experiment, I only had a few reward centers and I was aiming for the actor to visit all of them. \\
-\\
-The lack of reward centers in my experiment would mean that there would be relatively little spiking in a DA-STDP model thus it would be difficult to obtain the behavior I would want. 
+These papers indicate that it may be possible to use DA-STDP to model the rat's behavior in my environment. However, there are two key differences between my set-up and those papers. First, in my experiment, the input is place cells thus the rat knows its global location. In those papers, the input is the immediate environment around the actor at a given point. The second major difference is that both experiments have many food items spread around the environment and it does not matter which food items the actor receives. For my experiment, I only had a few reward centers and I was aiming for the actor to visit all of them. 
 
 
 
@@ -175,6 +173,8 @@ In all likelihood, the actor-critic model is not well suited for multiple object
 \section{Future Work}
 
 The lack of reward centers would make it difficult to model the spiking in a DA-STDP model, but still possible. The input would be the place cell activity and it would connect to a network of excitatory and inhibitory networks modulated by DA-STDP. The output from these neurons could be used to determine the next move for the rat. This network would be extremely similar to the one presented in the **PLOS ONE PAPER** with the main difference being the input layer. 
+
+The lack of reward centers in my experiment would mean that there would be relatively little spiking in a DA-STDP model thus it would be difficult to obtain the behavior I would want. 
 
 \begin{thebibliography}{1}
 
