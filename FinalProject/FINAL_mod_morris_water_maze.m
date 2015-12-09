@@ -48,21 +48,4 @@ FINAL_make2figure( rewards,z,ratPathsX,ratPathsY )
 
 %%
 
-sortedX = unique(pc.x);
-sortedY = unique(pc.y);
-wMatrix = zeros(length(sortedY),length(sortedX));
-for i = 1:length(w)
-    xCur = pc.x(i);
-    yCur = pc.y(i);
-    
-    curCol = find(xCur==sortedX,1);
-    curRow = find(yCur==sortedY,1);
-    
-    curVal = w(i);
-    wMatrix(curRow,curCol)=curVal;
-
-end
-wMatrix = flipud(wMatrix);
-figure
-imagesc(wMatrix);
-colorbar;
+FINAL_makeWfigure( w )
