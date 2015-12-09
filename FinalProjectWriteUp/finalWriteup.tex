@@ -98,7 +98,7 @@ In order to see if there would be an effect if we modeled the fact that cities h
 \subsection{Reward Center Locations}
 For the reward center locations, I used basic locations to start off and then used locations inspired by the cities in the United States and Europe. \\
 \\
-In order to have well placed cities, for my United States map, I used New York, Chicago, Los Angeles, Atlanta, and Denver. For the Europe map, I used Paris, London, Warsaw, Berlin, and Vienna. I found their latitude and longitude coordinates in signed degrees format and plotted them on a 2D plane, rescaling for the water maze. I made sure to vary which particular set of cities I chose in a given trial. 
+In order to have well placed cities, for my United States map, I used New York, Chicago, Los Angeles, Atlanta, and Denver. For the Europe map, I used Warsaw, Berlin, and Vienna. I found their latitude and longitude coordinates in signed degrees format and plotted them on a 2D plane, rescaling for the water maze. I made sure to vary which particular set of cities I chose in a given trial. 
 
 \subsection{Rat Testing}
 
@@ -119,55 +119,56 @@ After using depreciating rewards, the rat starting moving around the maze in a m
 
 \subsection{European cities, constant initial rewards}
 
-It can be reasonably assumed that the highest capacity highway would need to be placed where the rat's activity is the greatest. Indeed, the region with a high amount of activity is around the center of the city points. \\
-\\
-For figure **INSERT REF**, I used the cities of Berlin, Vienna, and Warsaw as my model for the reward center locations. During the testing phase, the rat moves toward one of the cities and also travels around the area between the cities. The interesting thing is that if you take the areas in the figure where the path lines are densest, then it could almost make a path that would make sense as travel routes between the cities. 
-**MENTION DEPRECIATION METHOD USED FOR THIS ONE**
+For the first figure, figure 1, the reward center locations reflect the European cities mentioned in the Reward Center Locations subsection of my experimental design. For this run, I depreciated the rewards by a constant factor in each time step. The reward values were all uniform in the beginning. After training, the actor gradients tend to favor the rightmost reward center but still point to the other reward center. When the testing was performed the rat moved toward each of the cities but mostly stayed in the path between the cities. An interesting result was that the area between the cities had the more dense concentration of path lines, however one reward center had a much more dense concentration than the others. For the critic weights, as can be observed in figure 1, they were higher near the reward centers as expected, but areas nearest the rightmost reward had much higher critic values.
 
 \begin{figure}
 \includegraphics[width=0.4\textwidth]{waterMazeRevised2_Figure.png} 
-\caption{Place Cell and Reward Center Locations (top). Actor Gradient (middle). Paths traversed by rat with reward centers in red (bottom)}
+\caption{Place Cells as blue dots and Reward Center Locations as green circles (top). Actor Gradient for each place in maze (middle). Paths traversed by rat with reward centers in red (bottom)}
 \end{figure}
 
 \begin{figure}
 \includegraphics[width=0.4\textwidth]{waterMazeRevised2_Critic.png} 
-\caption{Critic Values in Maze}
+\caption{Critic Weights for Maze from Figure 1}
 \end{figure}
 
-For figure **INSERT REF**, I used the cities of New York, Chicago, Los Angeles, Seattle, and Atlanta. After training, the rat had relatively good actor gradient directions. When charting all the paths the rat took, there is a high density in the middle area between all the cities which would coincide with where we would want a road to be to go between all the cities. 
+\subsection{American cities, constant initial rewards}
+
+For Figure 3, the reward center locations reflect the American cities mentioned in the experimental design. The initial rewards are constant but they decrement by a constant amount instead of constant factor each time the rat receives it. The results ended up quite similar to the case of European cities. There ended up being a distinct area between the reward centers heavily favored by the actor gradient so during testing that area is densest in terms of path lines. Instead of heavily favoring one reward center over another, the rat seemed confused in this area. In Figure 4, the critic values are highest on the right or left side and low in the middle which probably helps explain the fact that the rat had a hard time choosing there.
 
 \begin{figure}
 \includegraphics[width=0.4\textwidth]{waterMazeRevisedD_Figure.png} 
-\caption{Place Cell and Reward Center Locations (top). Actor Gradient (middle). Paths traversed by rat with reward centers in red (bottom)}
+\caption{Place Cells as blue dots and Reward Center Locations as green circles (top). Actor Gradient for each place in maze (middle). Paths traversed by rat with reward centers in red (bottom)}
 \end{figure}
 
 \begin{figure}
 \includegraphics[width=0.4\textwidth]{waterMazeRevisedD_Critic.png} 
-\caption{Critic Values in Maze}
+\caption{Critic Weights for Maze from Figure 3}
 \end{figure}
+
+\subsection{European cities, varying initial rewards}
 
 For figures **INSERT REF**, I used the European cities but changed their initial reward values based on their population. 
 
 \begin{figure}
 \includegraphics[width=0.4\textwidth]{waterMazeRevised2_Figure_populationRewards.png} 
-\caption{Place Cell and Reward Center Locations (top). Actor Gradient (middle). Paths traversed by rat with reward centers in red (bottom)}
+\caption{Actor Gradient for each place in maze (top). Paths traversed by rat with reward centers in red (bottom)}
 \end{figure}
 
 \begin{figure}
 \includegraphics[width=0.4\textwidth]{waterMazeRevised2_Critic_populationRewards.png} 
-\caption{Critic Values in Maze}
+\caption{Critic Weights for Maze from Figure 5}
 \end{figure}
 
 For figures **INSERT REF**, I used the American cities but changed their initial reward values based on their population. 
 
 \begin{figure}
 \includegraphics[width=0.4\textwidth]{waterMazeRevisedD_Figure_populationRewards.png} 
-\caption{Place Cell and Reward Center Locations (top). Actor Gradient (middle). Paths traversed by rat with reward centers in red (bottom)}
+\caption{Actor Gradient for each place in maze (top). Paths traversed by rat with reward centers in red (bottom)}
 \end{figure}
 
 \begin{figure}
 \includegraphics[width=0.4\textwidth]{waterMazeRevisedD_Critic_populationRewards.png} 
-\caption{Critic Values in Maze}
+\caption{Critic Weights for Maze from Figure 7}
 \end{figure}
 
 \section{Conclusion}

@@ -194,7 +194,7 @@ drawnow;
 %runs trials without updating weights
 %records the paths that the rat takes
 
-TRIALS2 = 7;
+TRIALS2 = 15;
 locInd=1;
 placeCellHits = zeros(size(pc.x));
 ratLocsX = zeros(1,250);
@@ -220,8 +220,8 @@ for trial = 1:TRIALS2
         
         % choose an action and move rat to new location
         act = action_select (a, beta);
-        act = adjustAct(act,prevAct);
-        prevAct = act;
+        %act = adjustAct(act,prevAct);
+        %prevAct = act;
         rat = move2(act, rat);
         
         ratLocsX(locInd)=rat.x;
@@ -294,6 +294,31 @@ co = [0    0.4470    0.7410;
     0.3010    0.7450    0.9330;
     0.6350    0.0780    0.1840];
 subplot(313)
+hold on
+for i = 1:TRIALS2
+    colorRow = mod(i,size(co,1))+1;
+   plot(ratPathsX{i},ratPathsY{i},'--','Color',co(colorRow,:)); 
+end
+plot(rewards(:,1),rewards(:,2),'rx','LineWidth',3);
+hold off;
+
+%%
+
+%%
+figure
+
+subplot(211)
+vectorPlot(z,pc);
+axis square;
+
+co = [0    0.4470    0.7410;
+    0.8500    0.3250    0.0980;
+    0.9290    0.6940    0.1250;
+    0.4940    0.1840    0.5560;
+    0.4660    0.6740    0.1880;
+    0.3010    0.7450    0.9330;
+    0.6350    0.0780    0.1840];
+subplot(212)
 hold on
 for i = 1:TRIALS2
     colorRow = mod(i,size(co,1))+1;
