@@ -71,7 +71,9 @@ Another model that has been proposed in the literature to simulate reinforcement
 \\
 In a paper by Skorkheim et al **PLOS ONE PAPER**, they model an actor foraging for food using DA-STDP. As it turns out, DA-STDP can be used to model the behavior effectively, however you have to impose additional constraints related to maintaining synaptic homeostasis in order for it to be effective. A similar experiment was done by Evans et al **ROBOT PAPER**, where he modeled the movement of a robot foraging for food in an environment. \\
 \\
-These papers indicate that it may be possible to use DA-STDP to model the rat's behavior in my environment. However, there are two key differences between my set-up and those papers. First, in my experiment, the input is place cells thus the rat knows its global location. In those papers, the input is the immediate environment around the actor at a given point. The second major difference is that both experiments have many food items spread around the environment and it does not matter which food items the actor receives. For my experiment, I only had a few reward centers and I was aiming for the actor to visit all of them. 
+These papers indicate that it may be possible to use DA-STDP to model the rat's behavior in my environment. However, there are two key differences between my set-up and those papers. First, in my experiment, the input is place cells thus the rat knows its global location. In those papers, the input is the immediate environment around the actor at a given point. The second major difference is that both experiments have many food items spread around the environment and it does not matter which food items the actor receives. For my experiment, I only had a few reward centers and I was aiming for the actor to visit all of them. \\
+\\
+The lack of reward centers in my experiment would mean that the spiking would occur much less than in other papers that used DA-STDP. For this reason, training the rat to move around my maze would likely be impractical and infeasible. I thus decided to stick with the Actor-Critic Model for my purposes. 
 
 
 
@@ -103,14 +105,20 @@ In order to have well placed cities, for my United States map, I used New York, 
 Once the rat was trained, I recorded the paths it takes when released back into the maze. The rat movement was exactly the same as during training except that the actor and critic values were left unchanged. The rat also started at random locations in the maze. In order to model a random location, I used polar coordinates and chose random $\theta$ and $r$ values that are within the realm of the circle and then converted the $(r,\theta)$ pair to its corresponding $(x,y)$ pair. 
 **MENTION THAT RAT MIGHT NOT STOP AT REWARD CENTERS**
 
-
 \section{Results}
 
-One of the tradeoffs was that without sufficient training, the rat tends to hang around areas that are at an equal distance from the reward centers and cannot decide which direction to go in. \\
+\subsection{Intiial Runs}
+
+For this experiment, it was critical to learn the actor gradients at each of the place cell. This would give a good indication as to the preferred direction of the rat at each point and thus indiciate which direction it is most likely to travel. When there was only one reward as in Foster et al **INSERT CITATION AND VERIFY THIS CLAIM**, the gradients tended to point toward the reward after learning. For my experiment, I was hoping they would all point to the nearest reward out of multiple rewards. Unfortunately, this did not always happen. \\
 \\
-FIGURES WITH THE PATH RESULTS AND LEARNED ACTOR-CRITIC VALUES\\
-INCLUDE FIGURES SHOWING CUMULATIVE DISTANCE TO THE TARGET\\
+When I first ran the experiment, I did not do any foraging behavior and thus kept the reward values constant. This would often cause the rat to favor the first reward it found and there would be an imbalance in that the actor gradients all favored that reward. Even when it did reach other rewards, the weights from the initial reward were great enough that the model still favored it. \\
 \\
+Another issue that emerged occured when the rat reached different reward centers a roughly equal amount of times and there was a distinct region between the reward centers where the gradient direction does not favor one reward center too strongly. When I ran the simulation after this occurred, instead of the rat randomly choosing one of the regions as I had hoped, it would instead become stuck between regions and move in a zig-zag manner near the border. This issue was not entirely mitigated and in my results are cases where the zig-zag motion can be observed.\\
+\\
+After using depreciating rewards, the rat starting moving around the maze in a more logical manner yet still with wide variations. The actor gradients still tended to favor one of the reward centers but not as highly as had happened before. The issue with the rat being unable to choose at border areas still persisted. When the paths were mapped, there were mixed results. In some cases, the highest density of path lines occurs in the path between reward centers which is exactly what we want. In other cases, the density of path lines is vaguely close to that but the movement of the rat was much more erratic than desired.
+
+\subsection{European cities, constant initial rewards}
+
 It can be reasonably assumed that the highest capacity highway would need to be placed where the rat's activity is the greatest. Indeed, the region with a high amount of activity is around the center of the city points. \\
 \\
 For figure **INSERT REF**, I used the cities of Berlin, Vienna, and Warsaw as my model for the reward center locations. During the testing phase, the rat moves toward one of the cities and also travels around the area between the cities. The interesting thing is that if you take the areas in the figure where the path lines are densest, then it could almost make a path that would make sense as travel routes between the cities. 
