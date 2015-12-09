@@ -13,24 +13,6 @@ TRIALS =50; %for European cities
 
 [ w,z ] = FINAL_trainRat( pc,rewards,reward_vals,...
     rewardDecFactor,rewardDecValue, TRIALS, epsilonThresh, 0 );
-%%
-
-subplot(121)
-scatter(pc.x,pc.y,10,'b.')
-hold on
-%scatter(rat.x, rat.y,50,'ro')
-for rNum = 1:numRewards
-    reward = rewards(rNum,:);
-    scatter(reward(1),reward(2),100,'go')
-end 
-axis square;
-hold off
-subplot(122)
-vectorPlot(z,pc);
-axis square;
-drawnow;
-%%
-
 
 %runs trials without updating weights
 %records the paths that the rat takes
