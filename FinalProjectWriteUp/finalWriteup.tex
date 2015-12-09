@@ -147,8 +147,8 @@ For Figure 3, the reward center locations reflect the American cities mentioned 
 
 \subsection{European cities, varying initial rewards}
 
-For figures **INSERT REF**, I used the European cities but changed their initial reward values based on their population. 
-
+For Figure 5, I used the European cities but changed their initial reward values based on their population. As can be observed, the results were not too different from before in that a strong preference exists for the area between the reward centers. The critic was similarly biased in Figure 6 toward one of the reward centers over the others.\\
+\\
 \begin{figure}
 \includegraphics[width=0.4\textwidth]{waterMazeRevised2_Figure_populationRewards.png} 
 \caption{Actor Gradient for each place in maze (top). Paths traversed by rat with reward centers in red (bottom)}
@@ -159,7 +159,9 @@ For figures **INSERT REF**, I used the European cities but changed their initial
 \caption{Critic Weights for Maze from Figure 5}
 \end{figure}
 
-For figures **INSERT REF**, I used the American cities but changed their initial reward values based on their population. 
+\subsection{American cities, varying initial rewards}
+
+For Figure 7, I used the American cities but changed their initial reward values based on their population. Again, the results were not too different from before. There is a heavy amount of activity in the area between reward centers. In Figure 8, the critic heavily favored the right side over the left side of the maze.
 
 \begin{figure}
 \includegraphics[width=0.4\textwidth]{waterMazeRevisedD_Figure_populationRewards.png} 
@@ -171,19 +173,15 @@ For figures **INSERT REF**, I used the American cities but changed their initial
 \caption{Critic Weights for Maze from Figure 7}
 \end{figure}
 
-\section{Conclusion}
-Rats should not be used for path planning. It was quite difficult getting the model to overcome adverse behaviors and even then, the paths taken were not terribly informative. Additionally, more efficient paths could easily be found. The hope with this project was that the actor-critic model would find compromise directions for each place cell and after enough training, you could use the actor cells to map out efficient paths all around the maze, either to the cities or between cities. \\
-\\
-Other things should be used for the Steiner Tree Problem. \\
-\\
-In all likelihood, the actor-critic model is not well suited for multiple objects and definitely not the Steiner Tree issue. \\
-\\
+\section{Conclusion and Future Work}
 
-\section{Future Work}
-
-The lack of reward centers would make it difficult to model the spiking in a DA-STDP model, but still possible. The input would be the place cell activity and it would connect to a network of excitatory and inhibitory networks modulated by DA-STDP. The output from these neurons could be used to determine the next move for the rat. This network would be extremely similar to the one presented in the **PLOS ONE PAPER** with the main difference being the input layer. 
-
-The lack of reward centers in my experiment would mean that there would be relatively little spiking in a DA-STDP model thus it would be difficult to obtain the behavior I would want. 
+Rat should not be used for path planning or anything related to the Steiner Tree problem. The rat ended up with too much of a preference toward a particular reward center or it spent too much time in between reward centers unable to decided. Even after doing my best to overcome these adverse behaviors, the paths taken were not terribly informative. The best conclusion that could be drawn from the results is that the region with the densest concentration of path lines should contain a line segment in the Steiner Tree. Computing this line segment from the set of paths would be impractial though and the Steiner Tree approximation algorithm is definitely much more efficient than simulating the rat. \\
+\\
+My hope with this project was that the actor cells would point toward their nearest reward center if quite close to one and in other cases, compromise directions would be mapped out. After that if you released the rat in random locations and stopped the training, it would take a variety of paths to the various reward centers. The goal was that after mapping these paths, you would get a very dense concentration in a region that resembled a Steiner Tree. While there were concentrations in areas that are likely part of the Steiner Tree, I would be hestistant to conclude anything about what the Steiner Tree should look like from these rat paths. \\
+\\
+While there was no insight into the Steiner Tree problem through this project, I did gain insight into using the Actor-Critic Model with multiple rewards. The most ideal results occured with uniform starting values and decreasing rewards when the rat reached a reward center. The rat does learn paths toward reward centers but furthur effort is needed to ensure that a rat does not stay stuck between reward centers. \\
+\\
+The other possible extension of the multiple reward center work is using DA-STDP for the rat's behavior. The network would most reseble the one in **PLOS ONE PAPER** however the input would be the place cell activity. The excitatory and inhibitory neurons as well as the output would likely stay the same for the most part with modifications to account for the number of place cell input neurons that I choose. As mentioned in the related work, the potential lack of spiking activity would however make this method potentially impractical.
 
 \begin{thebibliography}{1}
 
