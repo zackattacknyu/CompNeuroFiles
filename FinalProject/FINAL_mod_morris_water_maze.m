@@ -1,14 +1,13 @@
 global radius;
 global obstacle;
 
+%default parameter values from morris_water_maze.m
 dirs = 8; % possible headings
 beta = 2; % for softmax
 radius = 1.0; % arena is 2 meters wide
 sigma = 0.16; % place cell tuning width of 0.16m
 reward_value = 1;
 eta = 0.01; % learning rate
-
-
 
 % set up place cell indices across circular arena
 inx = 0;
@@ -22,29 +21,14 @@ for i = -radius:sigma/2:radius
     end
 end
 
-%rewards = [0.50 -0.50];
-%rewards = [0.5 -0.5; -0.5 0.5; 0.5 0.5; -0.5 -0.5];
-%rewards = [0.5 -0.5; -0.5 0.5];
 rewards = [citiesLong citiesLat];
 %reward_vals = citiesRew;
 reward_vals = ones(size(rewards,1),1); %values for each reward, which decrease. 
-%reward_vals = [1 1 1 1 1 1] %values for each reward, which decrease. 
+
 rewardDecFactor = 0.9; %factor to decrease reward value by each time
 %rewardDecValue = 0.075; %value to decrease reward value
 epsilonThresh = 0.3;
 
-globalRewards = rewards;
-
-
-%makes random reward centers
-%{
-rewards = zeros(3,2);
-reward_r = rand(3,1)*0.8;
-reward_theta = rand(3,1)*2*pi;
-reward_complex = reward_r.*exp(reward_theta*1i);
-rewards(:,1)=real(reward_complex);
-rewards(:,2)=imag(reward_complex);
-%}
 numRewards = size(rewards,1);
 
 obstacle = [1.0 1.0];
@@ -59,14 +43,6 @@ for trial = 1:TRIALS
     
     % get rat's initial position. start each trial in a different quadrant
     rat = getInitLocation(trial);
-    
-    %{
-    curRewardNum = mod(trial,numGlobalRewards)+1;
-    ratPos = globalRewards(curRewardNum,:);
-    activeRewards = setdiff(1:numGlobalRewards,curRewardNum);
-    rewards = globalRewards(activeRewards,:);
-    rat.x = ratPos(1);rat.y = ratPos(2);
-    %}
     
     % let the rat explore for 100 time steps or until it gets reward
     t = 1;
