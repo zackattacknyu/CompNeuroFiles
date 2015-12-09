@@ -59,39 +59,37 @@ In the paper by Foster, they had a single reward center for the rat. For this ex
 
 \subsection{Steiner Tree Problem}
 
-The Euclidean Steiner Tree Problem is as follows: Given $n$ points in a $2D$ plane, connect them via line segments such that the total line segment length is minimized and every point can travel to every other point. Currently this problem is NP-hard meaning that it is not known whether or not there is an efficient algorithm. There is a polynomial time approximation scheme that has been found for it **INSERT CITATION**.  
+The Euclidean Steiner Tree Problem is as follows: Given $n$ points in a $2D$ plane, connect them via line segments such that the total line segment length is minimized and every point can travel to every other point. Currently this problem is NP-hard meaning that it is not known whether or not there is an efficient algorithm. There is a polynomial time approximation scheme that has been found for it \cite{steiner1,steiner2}.  
 
 \subsection{Slime Mode Interstates}
 
-There was an attempt at solving something similar to the Steiner Tree problem using the behavior of biological organisms. Food was placed at locations imitating the 20 largest cities in the United States and then slime mold was released. **INSERT CITATION** The paths sketched out by the slime mold ended up being similar to the interstate highway system and is thus likely similar to what the Steiner Tree would look like. This is a great example of how the aggregate of simple actions taken by a biological organism can yield useful results. My goal with the rat experiment was to see if we would get useful results taking the aggregate of the paths it takes after learning. 
+There was an attempt at solving something similar to the Steiner Tree problem using the behavior of biological organisms. Food was placed at locations imitating the 20 largest cities in the United States and then slime mold was released \cite{slimemold}. The paths sketched out by the slime mold ended up being similar to the interstate highway system and is thus likely similar to what the Steiner Tree would look like. This is a great example of how the aggregate of simple actions taken by a biological organism can yield useful results. My goal with the rat experiment was to see if we would get useful results taking the aggregate of the paths it takes after learning. 
 
 \subsection{DA-STDP for foraging tasks}
 
 Another model that has been proposed in the literature to simulate reinforcement learning is Dopamine-modulated Spike-time dependent plasticity (DA-STDP). There are two papers in particular where they used it to model a direct actor foraging for rewards. \\
 \\
-In a paper by Skorkheim et al **PLOS ONE PAPER**, they model an actor foraging for food using DA-STDP. As it turns out, DA-STDP can be used to model the behavior effectively, however you have to impose additional constraints related to maintaining synaptic homeostasis in order for it to be effective. A similar experiment was done by Evans et al **ROBOT PAPER**, where he modeled the movement of a robot foraging for food in an environment. \\
+In a paper by Skorkheim et al \cite{plosone}, they model an actor foraging for food using DA-STDP. As it turns out, DA-STDP can be used to model the behavior effectively, however you have to impose additional constraints related to maintaining synaptic homeostasis in order for it to be effective. A similar experiment was done by Evans \cite{robot}, where he modeled the movement of a robot foraging for food in an environment. \\
 \\
 These papers indicate that it may be possible to use DA-STDP to model the rat's behavior in my environment. However, there are two key differences between my set-up and those papers. First, in my experiment, the input is place cells thus the rat knows its global location. In those papers, the input is the immediate environment around the actor at a given point. The second major difference is that both experiments have many food items spread around the environment and it does not matter which food items the actor receives. For my experiment, I only had a few reward centers and I was aiming for the actor to visit all of them. \\
 \\
 The lack of reward centers in my experiment would mean that the spiking would occur much less than in other papers that used DA-STDP. For this reason, training the rat to move around my maze would likely be impractical and infeasible. I thus decided to stick with the Actor-Critic Model for my purposes. 
 
-
-
 \section{Experiment Design}
 
 \subsection{Rat Movements}
 
-For the real experiments there would be a rat moving around a circular pool. I thus had a "rat" with an x-y location moving around a circle. In my model, the rat has place cells in its hippo-campus and each of the place cells has a preferred location in the circle. Each place cell feeds into a critic cell as well as 8 actor cells. The place cell location, responses by the actor and critic cells, and final direction chosen by the rat was determined using the model specified in Foster et al **INSERT CITATION**. \\
+For the real experiments there would be a rat moving around a circular pool. I thus had a "rat" with an x-y location moving around a circle. In my model, the rat has place cells in its hippo-campus and each of the place cells has a preferred location in the circle. Each place cell feeds into a critic cell as well as 8 actor cells. The place cell location, responses by the actor and critic cells, and final direction chosen by the rat was determined using the model specified in Foster et al \cite{foster}. \\
 \\
 There were two important things to consider when modeling the rat's movements: how much it changes direction and what to do if it hits the wall. For simplification, I assumed that a rat "bounces off" a wall if it hits it. This means that I had $\pi$ radians to its direction of movement in order to reverse it. When doing this, it is possible that if the rat hits the wall from a certain angle at the right location, then it could keep bouncing forever. If the rat failed to be at a proper location after "bouncing" then I change its direction by $\frac{\pi}{2}$ radians in order to prevent this from occurring. \\
 \\
-The other thing to consider is how much the rat's direction is allowed to change in each time step. Here I deviated from the design in Foster **INSERT CITATION** and chose my own method. I assumed that in each time step, the rat has only three choices: continue traveling in the same direction, move slightly to the left, or move slightly to right. Traveling in the same direction means that the angle of movement stays constant. Moving slightly to the left means that the angle increases by $\frac{\pi}{4}$ radians. Moving slightly to the right means the angle decreases by $\frac{\pi}{4}$ radians. In order to determine the rat's next move, I shifted the coordinate system so that the previous angle was the positive x-direction. If the vector representing the next angle had a positive y-value then I had the rat move slightly to the left. If the vector had a negative y-value then the rat moved slightly to the right.\\
+The other thing to consider is how much the rat's direction is allowed to change in each time step. Here I deviated from the design in Foster \cite{foster} and chose my own method. I assumed that in each time step, the rat has only three choices: continue traveling in the same direction, move slightly to the left, or move slightly to right. Traveling in the same direction means that the angle of movement stays constant. Moving slightly to the left means that the angle increases by $\frac{\pi}{4}$ radians. Moving slightly to the right means the angle decreases by $\frac{\pi}{4}$ radians. In order to determine the rat's next move, I shifted the coordinate system so that the previous angle was the positive x-direction. If the vector representing the next angle had a positive y-value then I had the rat move slightly to the left. If the vector had a negative y-value then the rat moved slightly to the right.\\
 \\
 **FIGURE OUT WHEN I DID NOT USE THIS**
 
 \subsection{Rat Training and Rewards}
 
-In order to train the rat, I followed the procedure used in Foster **INSERT CITATION** and used many parts of the morris\_water\_maze.m code. In each trial, the rat was released in one of 4 locations and then "moved" (as described above) until it found a reward center or 250 time steps had passed, whichever came first. Once the reward center was found, the actor critic values were updated. Unlike in Foster **INSERT CITATION**, I had multiple reward centers. Initially they all gave a reward of 1.\\
+In order to train the rat, I followed the procedure used in Foster \cite{foster} and used many parts of the morris\_water\_maze.m code. In each trial, the rat was released in one of 4 locations and then "moved" (as described above) until it found a reward center or 250 time steps had passed, whichever came first. Once the reward center was found, the actor critic values were updated. Unlike in Foster \cite{foster}, I had multiple reward centers. Initially they all gave a reward of 1.\\
 \\
 In order to make sure a rat does not get too attached to one reward, their reward value decreased by a constant amount each time the rat reached it. The reward center was not used once the value fell below a certain threshold. The rat was trained until a certain number of trials occurred or all the rewards had been spent, whichever came first. \\
 \\
@@ -110,7 +108,7 @@ Once the rat was trained, I recorded the paths it takes when released back into 
 
 \subsection{Intiial Runs}
 
-For this experiment, it was critical to learn the actor gradients at each of the place cell. This would give a good indication as to the preferred direction of the rat at each point and thus indiciate which direction it is most likely to travel. When there was only one reward as in Foster et al **INSERT CITATION AND VERIFY THIS CLAIM**, the gradients tended to point toward the reward after learning. For my experiment, I was hoping they would all point to the nearest reward out of multiple rewards. Unfortunately, this did not always happen. \\
+For this experiment, it was critical to learn the actor gradients at each of the place cell. This would give a good indication as to the preferred direction of the rat at each point and thus indiciate which direction it is most likely to travel. When there was only one reward as in Foster et al \cite{foster} **VERIFY THIS CLAIM**, the gradients tended to point toward the reward after learning. For my experiment, I was hoping they would all point to the nearest reward out of multiple rewards. Unfortunately, this did not always happen. \\
 \\
 When I first ran the experiment, I did not do any foraging behavior and thus kept the reward values constant. This would often cause the rat to favor the first reward it found and there would be an imbalance in that the actor gradients all favored that reward. Even when it did reach other rewards, the weights from the initial reward were great enough that the model still favored it. \\
 \\
@@ -182,7 +180,7 @@ My hope with this project was that the actor cells would point toward their near
 \\
 While there was no insight into the Steiner Tree problem through this project, I did gain insight into using the Actor-Critic Model with multiple rewards. The most ideal results occured with uniform starting values and decreasing rewards when the rat reached a reward center. The rat does learn paths toward reward centers but furthur effort is needed to ensure that a rat does not stay stuck between reward centers.\\
 \\
-The other possible extension of the multiple reward center work is using DA-STDP for the rat's behavior. The network would most reseble the one in **PLOS ONE PAPER** however the input would be the place cell activity. The excitatory and inhibitory neurons as well as the output would likely stay the same for the most part with modifications to account for the number of place cell input neurons that I choose. As mentioned in the related work, the potential lack of spiking activity would however make this method potentially impractical.
+The other possible extension of the multiple reward center work is using DA-STDP for the rat's behavior. The network would most reseble the one in \cite{plosone} however the input would be the place cell activity. The excitatory and inhibitory neurons as well as the output would likely stay the same for the most part with modifications to account for the number of place cell input neurons that I choose. As mentioned in the related work, the potential lack of spiking activity would however make this method potentially impractical.
 
 
 %\bibliographystyle{acmsiggraph}
@@ -200,7 +198,7 @@ doi: 10.1109/SFCS.1997.646145
 Evans, Richard. "Reinforcement Learning in a Neurally Controlled Robot Using Dopamine Modulated STDP." arXiv preprint arXiv:1502.06096 (2015).
 \bibitem{foster}
 Foster, D. J., R. G. M. Morris, and Peter Dayan. "A model of hippocampally dependent navigation, using the temporal difference learning rule." Hippocampus 10.1 (2000): 1-16.
-\bibitem{plosOne}
+\bibitem{plosone}
 Skorheim S, Lonjers P, Bazhenov M (2014) A Spiking Network Model of Decision Making Employing Rewarded STDP. PLoS ONE 9(3): e90821. doi: 10.1371/journal.pone.0090821
 \end{thebibliography}
 
