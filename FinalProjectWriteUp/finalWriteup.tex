@@ -51,9 +51,9 @@ For this project, I attempted to see what paths a rat would take if the Morris W
 
 The Morris Water Maze is one where a rat is released into a pool of water and searches for a platform which will provide relief from having to swim. The platform is thus considered a reward in the brain of the rat. Due to the constant location of these platforms, it is optimal for the rat to learn this location. By observing the rat over multiple trials we can extrapolate information about its learning abilities.\\
 \\
-If we wish to approximate what would happen if we did a physical experiment, we can use a model for its neuronal activity. For the purposes of this experiment, I assumed that there are a series of place cells in its hippocampus that each have their own actor and critic cells. The place cells fire at their own preferred locations and send signals to the actor and critic cells. When the rewards are reached, the actor and critic values are updated using the Temporal Difference learning rule. Output from the actor and critic cells is used to determined the rat's next move. The neuronal network described was implemented by Foster et all **CITE PAPER**. \\
+If we wish to approximate what would happen if we did a physical experiment, we can use a model for its neuronal activity. For the purposes of this experiment, I assumed that there are a series of place cells in its hippocampus that each have their own actor and critic cells. The place cells fire at their own preferred locations and send signals to the actor and critic cells. When the rewards are reached, the actor and critic values are updated using the Temporal Difference learning rule. Output from the actor and critic cells is used to determined the rat's next move. The neuronal network described was implemented by Foster et al \cite{foster}. \\
 \\
-In the paper by Foster, they had a single reward center for the rat. For this experiment, I wanted to observe what could happen if you used the same neuron model but had multiple reward centers. More specifically, I wanted to observe the paths that a rat would take to travel between all the reward centers. The hope is that something similar to a Steiner Tree **INSERT CITATION** would emerge. 
+In the paper by Foster, they had a single reward center for the rat. For this experiment, I wanted to observe what could happen if you used the same neuron model but had multiple reward centers. More specifically, I wanted to observe the paths that a rat would take to travel between all the reward centers. The hope is that something similar to a Steiner Tree \cite{steiner1,steiner2} would emerge. 
 
 \section{Related Work}
 
@@ -180,16 +180,28 @@ Rat should not be used for path planning or anything related to the Steiner Tree
 \\
 My hope with this project was that the actor cells would point toward their nearest reward center if quite close to one and in other cases, compromise directions would be mapped out. After that if you released the rat in random locations and stopped the training, it would take a variety of paths to the various reward centers. The goal was that after mapping these paths, you would get a very dense concentration in a region that resembled a Steiner Tree. While there were concentrations in areas that are likely part of the Steiner Tree, I would be hestistant to conclude anything about what the Steiner Tree should look like from these rat paths. \\
 \\
-While there was no insight into the Steiner Tree problem through this project, I did gain insight into using the Actor-Critic Model with multiple rewards. The most ideal results occured with uniform starting values and decreasing rewards when the rat reached a reward center. The rat does learn paths toward reward centers but furthur effort is needed to ensure that a rat does not stay stuck between reward centers. \\
+While there was no insight into the Steiner Tree problem through this project, I did gain insight into using the Actor-Critic Model with multiple rewards. The most ideal results occured with uniform starting values and decreasing rewards when the rat reached a reward center. The rat does learn paths toward reward centers but furthur effort is needed to ensure that a rat does not stay stuck between reward centers.\\
 \\
 The other possible extension of the multiple reward center work is using DA-STDP for the rat's behavior. The network would most reseble the one in **PLOS ONE PAPER** however the input would be the place cell activity. The excitatory and inhibitory neurons as well as the output would likely stay the same for the most part with modifications to account for the number of place cell input neurons that I choose. As mentioned in the related work, the potential lack of spiking activity would however make this method potentially impractical.
 
+
+%\bibliographystyle{acmsiggraph}
+%\bibliography{finalPaperRefs}
+
 \begin{thebibliography}{1}
-
-\bibitem{IEEEhowto:kopka}
-H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
-  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
-
+\bibitem{slimemold}
+Adamatzky, Andrew, and Andrew Ilachinski. "Slime mold imitates the United States interstate system." Complex Systems 21.1 (2012): 1.
+\bibitem{steiner1}
+Arora, Sanjeev. "Polynomial time approximation schemes for Euclidean TSP and other geometric problems." Foundations of Computer Science, 1996. Proceedings., 37th Annual Symposium on. IEEE, 1996.
+\bibitem{steiner2}
+Arora, S., "Nearly linear time approximation schemes for Euclidean TSP and other geometric problems," in Foundations of Computer Science, 1997. Proceedings., 38th Annual Symposium on , vol., no., pp.554-563, 20-22 Oct 1997
+doi: 10.1109/SFCS.1997.646145
+\bibitem{robot}
+Evans, Richard. "Reinforcement Learning in a Neurally Controlled Robot Using Dopamine Modulated STDP." arXiv preprint arXiv:1502.06096 (2015).
+\bibitem{foster}
+Foster, D. J., R. G. M. Morris, and Peter Dayan. "A model of hippocampally dependent navigation, using the temporal difference learning rule." Hippocampus 10.1 (2000): 1-16.
+\bibitem{plosOne}
+Skorheim S, Lonjers P, Bazhenov M (2014) A Spiking Network Model of Decision Making Employing Rewarded STDP. PLoS ONE 9(3): e90821. doi: 10.1371/journal.pone.0090821
 \end{thebibliography}
 
 
