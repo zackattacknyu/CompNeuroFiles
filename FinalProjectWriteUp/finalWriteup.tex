@@ -49,26 +49,32 @@ For this project, I attempted to see what paths a rat would take if the Morris W
 
 \section{Introduction}
 
-The Morris Water Maze is one where a rat is released into a pool of water and searches for a platform which will provide relief from having to swim. The platform is thus considered a reward in the brain of the rat. Due to the constant location of these platforms, it is optimal for the rat to learn this location and it is desirable for us to model this learning.\\
+The Morris Water Maze is one where a rat is released into a pool of water and searches for a platform which will provide relief from having to swim. The platform is thus considered a reward in the brain of the rat. Due to the constant location of these platforms, it is optimal for the rat to learn this location. By observing the rat over multiple trials we can extrapolate information about its learning abilities.\\
 \\
-A common model for the neuronal activity in the rat involves place cells in the hippocampus that send signals depending on the current location of the rat. The Actor-Critic Model is used to control what the optimal next move should be for the rat. \\
+If we wish to approximate what would happen if we did a physical experiment, we can use a model for its neuronal activity. For the purposes of this experiment, I assumed that there are a series of place cells in its hippocampus that each have their own actor and critic cells. The place cells fire at their own preferred locations and send signals to the actor and critic cells. When the rewards are reached, the actor and critic values are updated using the Temporal Difference learning rule. Output from the actor and critic cells is used to determined the rat's next move. The neuronal network described was implemented by Foster et all **CITE PAPER**. \\
 \\
-A common problem is transportation planning is that there are multiple locations that all need to reach each other so there needs to be a minimal cost network that connects them all. I attempted to see if rat movements could give more insights into this problem. \\
+In the paper by Foster, they had a single reward center for the rat. For this experiment, I wanted to observe what could happen if you used the same neuron model but had multiple reward centers. More specifically, I wanted to observe the paths that a rat would take to travel between all the reward centers. The hope is that something similar to a Steiner Tree **INSERT CITATION** would emerge. 
 
 \section{Related Work}
 
-\subsection{Foraging Behavior in Rats}
-Foraging behavior for rats has been commonly studied.
+\subsection{Steiner Tree Problem}
 
-\subsection{DA-STDP for foraging}
-
-There were attempts to study foraging behavior using DA-STDP. In this paper, **CITE PLOS ONE PAPER**, they modeled a rat foraging for food in an environment. In the paper there were many issues getting the model to work thus it would have proven impractical for me to do. \\
-\\
-In this paper, **THE ROBOT**, they model a robot's movement via DA-STDP. While they accomplish a lot in the paper, due to the lack of place cells and other deficiencies with the input, it would have proven impractical for my purposes. Tuning DA-STDP would have been very difficult and deciding on good input parameters would also have been challenging. \\
+The Euclidean Steiner Tree Problem is as follows: Given $n$ points in a $2D$ plane, connect them via line segments such that the total line segment length is minimized and every point can travel to every other point. Currently this problem is NP-hard meaning that it is not known whether or not there is an efficient algorithm. There is a polynomial time approximation scheme that has been found for it **INSERT CITATION**.  
 
 \subsection{Slime Mode Interstates}
 
-There was work done where food was placed at the location of the 20 largest cities in the United States and then slime mold was released. The paths sketched out by the slime mold ended up being similar to the interstate highway system. This is a great example of how the aggregate of simple actions taken by a biological organism can yield useful results. My goal with the rat experiment was to see if we would get useful results taking the aggregate of the paths it takes after learning. 
+There was an attempt at solving something similar to the Steiner Tree problem using the behavior of biological organisms. Food was placed at locations imitating the 20 largest cities in the United States and then slime mold was released. **INSERT CITATION** The paths sketched out by the slime mold ended up being similar to the interstate highway system and is thus likely similar to what the Steiner Tree would look like. This is a great example of how the aggregate of simple actions taken by a biological organism can yield useful results. My goal with the rat experiment was to see if we would get useful results taking the aggregate of the paths it takes after learning. 
+
+\subsection{DA-STDP for foraging tasks}
+
+Another model that has been proposed in the literature to simulate reinforcement learning is Dopamine-modulated Spike-time dependent plasticity (DA-STDP). There are two papers in particular where they used it to model a direct actor foraging for rewards. \\
+\\
+In a paper by Skorkheim et al **PLOS ONE PAPER**, they model an actor foraging for food using DA-STDP. As it turns out, DA-STDP can be used to model the behavior effectively, however you have to impose additional constraints related to maintaining synaptic homeostasis in order for it to be effective. A similar experiment was done by Evans et al **ROBOT PAPER**, where he modeled the movement of a robot foraging for food in an environment. \\
+\\
+These papers indicate that it may be possible to use DA-STDP to model the rat's behavior in my environment. However, there are two key differences between my set-up and those papers. First, in my experiment, the input is place cells thus the rat knows its global location. In those papers, the input is the immediate environment around the actor at a given point. The second major difference is that both experiments have many food items spread around the environment and it does not matter which food items the actor receives. For my experiment, I only had a few reward centers and I was aiming for the actor to visit all of them. \\
+\\
+The lack of reward centers in my experiment would mean that there would be relatively little spiking in a DA-STDP model thus it would be difficult to obtain the behavior I would want. 
+
 
 
 \section{Experiment Design}
@@ -85,7 +91,7 @@ The other thing to consider is how much the rat's direction is allowed to change
 
 In order to train the rat, I followed the procedure used in Foster **INSERT CITATION** and used many parts of the morris\_water\_maze.m code. In each trial, the rat was released in one of 4 locations and then "moved" (as described above) until it found a reward center or 250 time steps had passed, whichever came first. Once the reward center was found, the actor critic values were updated. Unlike in Foster **INSERT CITATION**, I had multiple reward centers. Initially they all gave a reward of 1.\\
 \\
-In order to model foraging behavior, their reward value decreased by a constant amount each time the rat reached it. The reward center was not used once the value fell below a certain threshold. The rat was trained until a certain number of trials occurred or all the rewards had been spent, whichever came first. \\
+In order to make sure a rat does not get too attached to one reward, their reward value decreased by a constant amount each time the rat reached it. The reward center was not used once the value fell below a certain threshold. The rat was trained until a certain number of trials occurred or all the rewards had been spent, whichever came first. \\
 \\
 In order to see if there would be an effect if we modeled the fact that cities have different populations, I also ran trials where the initial reward values were different **IMPLEMENT THIS AND SHOW FIGURES**. I took the population values and did a rescale and shift so that they fell between 0.5 and 1. 
 
@@ -159,8 +165,16 @@ For figures **INSERT REF**, I used the American cities but changed their initial
 \end{figure}
 
 \section{Conclusion}
-Rats should not be used for path planning. It was quite difficult getting the model to overcome adverse behaviors and even then, the paths taken were not terribly informative. Additionally, more efficient paths could easily be found. The hope with this project was that the actor-critic model would find compromise directions for each place cell and after enough training, you could use the actor cells to map out efficient paths all around the maze, either to the cities or between cities. 
+Rats should not be used for path planning. It was quite difficult getting the model to overcome adverse behaviors and even then, the paths taken were not terribly informative. Additionally, more efficient paths could easily be found. The hope with this project was that the actor-critic model would find compromise directions for each place cell and after enough training, you could use the actor cells to map out efficient paths all around the maze, either to the cities or between cities. \\
+\\
+Other things should be used for the Steiner Tree Problem. \\
+\\
+In all likelihood, the actor-critic model is not well suited for multiple objects and definitely not the Steiner Tree issue. \\
+\\
 
+\section{Future Work}
+
+The lack of reward centers would make it difficult to model the spiking in a DA-STDP model, but still possible. The input would be the place cell activity and it would connect to a network of excitatory and inhibitory networks modulated by DA-STDP. The output from these neurons could be used to determine the next move for the rat. This network would be extremely similar to the one presented in the **PLOS ONE PAPER** with the main difference being the input layer. 
 
 \begin{thebibliography}{1}
 
