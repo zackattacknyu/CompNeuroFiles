@@ -35,17 +35,18 @@ drawnow;
 %runs trials without updating weights
 %records the paths that the rat takes
 
-TRIALS2 = 15;
+%TRIALS2 = 15;
+TRIALS2 = 50; %for European cities, 1
 locInd=1;
-placeCellHits = zeros(size(pc.x));
 ratLocsX = zeros(1,250);
 ratLocsY = zeros(1,250);
 ratPathsX = cell(1,TRIALS2);
 ratPathsY = cell(1,TRIALS2);
 for trial = 1:TRIALS2
     
+    trial
+    
     % get rat's initial position. start each trial in a different quadrant
-    %rat = getInitLocation(trial);
     rat = getRandLocation(0.1,0.9);
     
     % let the rat explore for 100 time steps or until it gets reward
@@ -84,15 +85,6 @@ for trial = 1:TRIALS2
                 a(j) = a(j) + z(j,i)*pc.act(i);
             end
         end
-
-        % if rat is within 0.2 meters of platform, give reward
-        for rNum = 1:numRewards
-            reward = rewards(rNum,:);
-            found_reward = norm([rat.x rat.y]-reward) < 0.2;
-            if(found_reward)
-               break; 
-            end
-        end
         
         t = t + 1;
         
@@ -105,10 +97,7 @@ for trial = 1:TRIALS2
     ratLocsY = ratLocsY(1:(locInd-1));
     ratPathsX{trial} = ratLocsX;
     ratPathsY{trial} = ratLocsY;
-    
-    trial
-    
-    latency(trial) = t;
+   
 end
 %%
 figure
