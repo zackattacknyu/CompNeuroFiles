@@ -1,8 +1,40 @@
 function [ w,z ] = FINAL_trainRat( pc,rewards,reward_vals,...
     rewardDecFactor,rewardDecValue, TRIALS, epsilonThresh, drawGraph )
+
+global radius;
+global obstacle;
+
+%default parameter values from morris_water_maze.m
+dirs = 8; % possible headings
+beta = 2; % for softmax
+radius = 1.0; % arena is 2 meters wide
+sigma = 0.16; % place cell tuning width of 0.16m
+reward_value = 1;
+eta = 0.01; % learning rate
+
+% set up place cell indices across circular arena
+inx = 0;
+for i = -radius:sigma/2:radius
+    for j = -radius:sigma/2:radius
+        if norm([i j]) < radius
+            inx = inx + 1;
+            pc.x(inx) = i;
+            pc.y(inx) = j;
+        end
+    end
+end
+
+z = zeros(dirs,inx); % actor weights
+w = zeros(1,inx); % critic weights
+
+obstacle = [1.0 1.0];
+numRewards = size(rewards,1);
+
 %FINAL_TRAINRAT Summary of this function goes here
 %   Detailed explanation goes here
 for trial = 1:TRIALS
+    
+    trial
     
     % get rat's initial position. start each trial in a different quadrant
     rat = getInitLocation(trial);
@@ -54,7 +86,6 @@ for trial = 1:TRIALS
                 reward_value = reward_vals(rNum);
                 reward_vals(rNum) = reward_vals(rNum)*rewardDecFactor;
                 reward_vals(rNum) = reward_vals(rNum)-rewardDecValue;
-                reward_vals
                 break
             end
             
@@ -81,7 +112,7 @@ for trial = 1:TRIALS
     end
 
     
-    if(mod(trial,1)==0 && drawGraph)
+    if(mod(trial,1)==0 && drawGraph==1)
         subplot(121)
         scatter(pc.x,pc.y,10,'b.')
         hold on
