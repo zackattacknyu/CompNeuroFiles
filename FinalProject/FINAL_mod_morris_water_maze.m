@@ -25,7 +25,10 @@ rewards = [citiesLong citiesLat];
 %reward_vals = citiesRew;
 reward_vals = ones(size(rewards,1),1); %values for each reward, which decrease. 
 
-rewardDecFactor = 0.9; %factor to decrease reward value by each time
+%for European cities
+rewardDecFactor = 0.95; %factor to decrease reward value by each time
+rewardDecValue = 0;
+
 %rewardDecValue = 0.075; %value to decrease reward value
 epsilonThresh = 0.3;
 
@@ -36,8 +39,8 @@ obstacle = [1.0 1.0];
 z = zeros(dirs,inx); % actor weights
 w = zeros(1,inx); % critic weights
 
-TRIALS =20;
-latency = zeros(1,TRIALS);
+%TRIALS =20;
+TRIALS =50; %for European cities
 
 for trial = 1:TRIALS
     
@@ -51,7 +54,7 @@ for trial = 1:TRIALS
     a = zeros(1,8);
     prevAct=1;
     
-    % run for 100 moves or until a reward is found. whichever comes first
+    % run for 250 moves or until a reward is found. whichever comes first
     while t <= 250 && ~found_reward;
         
         % choose an action and move rat to new location
@@ -90,8 +93,7 @@ for trial = 1:TRIALS
             if(found_reward)
                 reward_value = reward_vals(rNum);
                 reward_vals(rNum) = reward_vals(rNum)*rewardDecFactor;
-                %reward_vals(rNum) = reward_vals(rNum)-rewardDecValue;
-                reward_vals
+                reward_vals(rNum) = reward_vals(rNum)-rewardDecValue;
                 break
             end
             
@@ -119,9 +121,6 @@ for trial = 1:TRIALS
 
     
     if(mod(trial,1)==0)
-        %subplot(131)
-        %scatter3(pc.x,pc.y,pc.act)
-        %axis square;
         subplot(121)
         scatter(pc.x,pc.y,10,'b.')
         hold on
@@ -137,8 +136,7 @@ for trial = 1:TRIALS
         axis square;
         drawnow;
     end
-    
-    latency(trial) = t;
+
 end
 %%
 
