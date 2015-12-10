@@ -45,7 +45,7 @@ FINAL_make2figure( rewards,z,ratPathsX,ratPathsY )
 %reward_vals = citiesRew;
 reward_vals = ones(size(rewards,1),1); %values for each reward, which decrease. 
 
-%for European cities
+%for American cities
 rewardDecFactor = 0.9; %factor to decrease reward value by each time
 rewardDecValue = 0;
 
