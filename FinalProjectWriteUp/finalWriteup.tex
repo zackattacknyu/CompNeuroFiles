@@ -30,7 +30,7 @@
 
 \begin{document}
 
-\title{Planning Paths for Rats using Actor-Critic Model}
+\title{A study of paths taken via Hippocampally dependent Navigation to Multiple Reward Centers, using the Temporal Difference learning rule with the Actor-Critic Model}
 
 
 \author{Zachary DeStefano}
@@ -40,7 +40,7 @@
 
 
 \begin{abstract}
-For this project, I attempted to see what paths a rat would take if the Morris Water Maze contained multiple rewards of varying value. The inspiration for this project was the layout of cities and the transportation networks used to connect them. I hoped to observe if a trained rat would use paths that look similar to those transportation networks. In order to do this, I trained the rat using hippocampal place cells that learn via temporal difference learning in the actor-critic model. After training, I started the rat at random locations and recorded the paths it took to the reward centers. In the end, the paths are suboptimal thus rats should not be used for path planning. 
+For this project, I attempted to see what paths a rat would take if the Morris Water Maze contained multiple rewards. The initial inspiration for this project was the layout of cities and the transportation networks used to connect them. As it turns out, the Steiner Tree problem captures the issue of how to connect multiple points with lines of minimum total length. I hoped to observe if a trained rat would use paths that look similar to what is contained in the Steiner Tree. In order to do this, I trained the rat via temporal difference learning in the actor-critic model. After training, I started the rat at random locations and recorded the paths it took to the reward centers. The diagrams of all the paths had high densities around the areas where the Steiner Tree is likely contained. This result was not conclusive enough to be used in approximating ideal paths but it did provide some insight into how the rat behaves with multiple rewards. 
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
