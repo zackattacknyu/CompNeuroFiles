@@ -88,7 +88,43 @@ FINAL_make3figure( rewards,z,ratPathsX,ratPathsY )
 
 %Generates Figure 4 approximately
 FINAL_makeWfigure( w )
+%%
+clear all;
+%{
+This block of code is the run that generates figures 5 and 6
+The European cities are used for the reward centers
+The initial reward values are based on population
+Rewards are depreciated by a constant value and not constant factor
+%}
 
+%function to retrieve our reward centers and reward values
+%   cities 8,12,13 are the American ones
+[rewards,reward_vals] = FINAL_getGeoRewards([8 12 13],0.5);
+
+%constant depreciating amount of 0.075. found by trial and error
+rewardDecFactor = 1; 
+rewardDecValue = 0.075;
+
+%threshold before reward is unusable. found by trial and error
+epsilonThresh = 0.3;
+
+TRIALS =20; %number of training trials
+TRIALS2 = 15; %number of test trials
+
+%run the training and obtain the actor and critic values
+%   for each place cell
+[ w,z ] = FINAL_trainRat( rewards,reward_vals,...
+    rewardDecFactor,rewardDecValue, TRIALS, epsilonThresh, 0 );
+
+%runs trials without updating weights
+%records the paths that the rat takes
+[ratPathsX,ratPathsY] = FINAL_testRat(z,TRIALS2);
+
+%generates figure 5 approximately
+FINAL_make2figure( rewards,z,ratPathsX,ratPathsY )
+
+%Generates Figure 6 approximately
+FINAL_makeWfigure( w )
 %%
 
 [rewards,reward_vals] = FINAL_getGeoRewards([8 12 13],0.5);
