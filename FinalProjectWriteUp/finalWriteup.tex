@@ -96,13 +96,11 @@ In order to make sure a rat does not get too attached to one reward, their rewar
 For later trials, the initial reward center values varied. This was done in order to see if there would be an effect if we modeled the fact that cities have different populations. I took the population values and did a rescale and shift so that the initial reward values fell between 0.5 and 1. 
 
 \subsection{Reward Center Locations}
-For the reward center locations, I used basic locations to start off and then used locations inspired by the cities in the United States and Europe. \\
-\\
-In order to have well placed cities, for my United States map, I used New York, Chicago, Los Angeles, Atlanta, and Denver. For the Europe map, I used Warsaw, Berlin, and Vienna. I found their latitude and longitude coordinates in signed degrees format and plotted them on a 2D plane, rescaling for the water maze. I made sure to vary which particular set of cities I chose in a given trial. 
+For the reward center locations, they were inspired by cities in the United States and Europe. For my United States map, I used New York, Chicago, Los Angeles, Seattle, and Atlanta. For the Europe map, I used Warsaw, Berlin, and Vienna. I found their latitude and longitude coordinates in signed degrees format and plotted them on a 2D plane, rescaling and shifting so they fit in the water maze. I had two trials with the American cities and two trials with the European cities;
 
 \subsection{Rat Testing}
 
-Once the rat was trained, I recorded the paths it takes when released back into the maze. The rat movement was exactly the same as during training except that the actor and critic values were left unchanged. The rat also started at random locations in the maze. In order to model a random location, I used polar coordinates and chose random $\theta$ and $r$ values that are within the realm of the circle and then converted the $(r,\theta)$ pair to its corresponding $(x,y)$ pair. During testing, I just wanted to see all the different paths a rat would take thus it did not stop at a reward center and just kept moving in the direction the actor told it to move.
+Once the rat was trained, I recorded the paths it takes when released back into the maze. The rat movement was exactly the same as during training except that the actor and critic values were left unchanged and there were no restrictions on its direction. The rat also started at random locations in the maze. In order to model a random location, I used polar coordinates and chose random $\theta$ and $r$ values that are within the realm of the circle and then converted the $(r,\theta)$ pair to its corresponding $(x,y)$ pair. The random starting locations and lack of restriction on direction were employed in order to observe what paths the actor and critic values would tell the rat to traverse. 
 
 \section{Results}
 
