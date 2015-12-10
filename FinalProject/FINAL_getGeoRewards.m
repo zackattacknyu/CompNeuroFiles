@@ -1,4 +1,4 @@
-function [ rewards,citiesRew ] = FINAL_getGeoRewards( citiesToInclude )
+function [ rewards,citiesRew ] = FINAL_getGeoRewards( citiesToInclude, shrink )
 %FINAL_GETGEOPOINTS Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -57,7 +57,7 @@ allCitiesPop=[
     1.7];
 
 %citiesToInclude = [1 2 3 4 5]; %for D
-citiesToInclude = [8 12 13]; %for 2
+%citiesToInclude = [8 12 13]; %for 2
 citiesLatLong = allCities(citiesToInclude,:);
 citiesPop = allCitiesPop(citiesToInclude);
 
@@ -81,12 +81,12 @@ citiesLat = citiesLat-0.5*(max(citiesLat)-min(citiesLat));
 citiesLong = 2*citiesLong;
 citiesLong = citiesLong-0.5*(max(citiesLong)-min(citiesLong));
 
-shrink = 0.5; %ensures that reward center is not at exact edge
+%shrink = 0.5; %ensures that reward center is not at exact edge
 citiesLat = citiesLat.*shrink;
 citiesLong = citiesLong.*shrink;
 
-plot(citiesLong,citiesLat,'rx');
-axis equal
+%plot(citiesLong,citiesLat,'rx');
+%axis equal
 
 rewards = [citiesLong citiesLat];
 end
