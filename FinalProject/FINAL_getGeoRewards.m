@@ -1,13 +1,20 @@
 function [ rewards,citiesRew ] = FINAL_getGeoRewards( citiesToInclude, shrink )
-%FINAL_GETGEOPOINTS Summary of this function goes here
-%   Detailed explanation goes here
+%FINAL_GETGEOPOINTS Gets points for our cities and reward center values
+%
+%
+% INPUT: 
+% citiesToInclude - array of indices of cities to include
+%                   listed below are the choices
+% shrink - locations will be rescaled to fit in circle of this radius
+%           used to ensure location will not be at edge of maze
 
 %{
-This gets us the geographical points for our cities
+Here are the cities and their coordinates and populations:
 Found though link on wikipedia to geographical coordinates
 Population data from wikipedia
 Coordinates in signed degrees format
 
+American cities (did not use all of them):
 1. New York: 40.728333,-73.994167; 8.5 million
 2. Chicago: 41.836944,-87.684722; 2.7 million
 3. Los Angeles: 34.05,-118.25; 3.9 million
@@ -15,7 +22,7 @@ Coordinates in signed degrees format
 5. Atlanta: 33.755,-84.39; 0.5 million
 6. Denver: 39.76185,-104.881105; 0.6 million
 
-
+European cities (did not use all of them):
 7. Amsterdam: 52.366667,4.9; 0.8 million
 8. Berlin: 52.516667,13.383333; 3.56 million
 9. Prague: 50.083333,14.416667; 1.26 million
@@ -26,6 +33,7 @@ Coordinates in signed degrees format
 
 %}
 
+%coordinates of listed cities
 allCities = [
 40.728333,-73.994167;
 41.836944,-87.684722;
@@ -41,6 +49,7 @@ allCities = [
 48.2,16.366667;
 52.233333,21.016667];
 
+%population of listed cities
 allCitiesPop=[
     8.5;
     2.7;
@@ -56,8 +65,7 @@ allCitiesPop=[
     1.8;
     1.7];
 
-%citiesToInclude = [1 2 3 4 5]; %for D
-%citiesToInclude = [8 12 13]; %for 2
+%gets our relevant info
 citiesLatLong = allCities(citiesToInclude,:);
 citiesPop = allCitiesPop(citiesToInclude);
 
@@ -65,10 +73,9 @@ citiesPop = allCitiesPop(citiesToInclude);
 citiesRew = (citiesPop-min(citiesPop))./(max(citiesPop)-min(citiesPop));
 citiesRew = citiesRew./2 + 0.5;
 
+%makes lat and long arrays
 citiesLat = citiesLatLong(:,1);
 citiesLong = citiesLatLong(:,2);
-
-
 latRange = max(citiesLat)-min(citiesLat);
 longRange = max(citiesLong)-min(citiesLong);
 range = max(latRange,longRange);
@@ -81,12 +88,9 @@ citiesLat = citiesLat-0.5*(max(citiesLat)-min(citiesLat));
 citiesLong = 2*citiesLong;
 citiesLong = citiesLong-0.5*(max(citiesLong)-min(citiesLong));
 
-%shrink = 0.5; %ensures that reward center is not at exact edge
+%ensures that reward center is not at exact edge
 citiesLat = citiesLat.*shrink;
 citiesLong = citiesLong.*shrink;
-
-%plot(citiesLong,citiesLat,'rx');
-%axis equal
 
 rewards = [citiesLong citiesLat];
 end
