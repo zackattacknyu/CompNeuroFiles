@@ -125,34 +125,6 @@ FINAL_make2figure( rewards,z,ratPathsX,ratPathsY )
 
 %Generates Figure 6 approximately
 FINAL_makeWfigure( w )
-%%
-
-[rewards,reward_vals] = FINAL_getGeoRewards([8 12 13],0.5);
-
-rewardDecFactor = 1; %factor to decrease reward value by each time
-rewardDecValue = 0.075;
-
-epsilonThresh = 0.3;
-
-TRIALS =20; %for American cities
-
-[ w,z ] = FINAL_trainRat( rewards,reward_vals,...
-    rewardDecFactor,rewardDecValue, TRIALS, epsilonThresh, 0 );
-
-%runs trials without updating weights
-%records the paths that the rat takes
-
-TRIALS2 = 15; %for European cities, 2
-
-[ratPathsX,ratPathsY] = FINAL_testRat(z,TRIALS2);
-
-%Generates Figure 5
-%Won't be exactly the same, but the same parameters were used
-FINAL_make2figure( rewards,z,ratPathsX,ratPathsY )
-
-%Generates Figure 6
-%Won't be exactly the same, but the same parameters were used
-FINAL_makeWfigure( w )
 
 %%
 
