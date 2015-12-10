@@ -1,18 +1,26 @@
 function [ w,z ] = FINAL_trainRat( rewards,reward_vals,...
     rewardDecFactor,rewardDecValue, TRIALS, epsilonThresh, drawGraph )
 
+%{
+This trains the rat and returns the actor and critic values    
+It takes in the parameters mentioned in the main function
+If drawGraph is set to 1, then the actor gradient graph
+   is drawn after each trial. 
+%}
+
 global radius;
 global obstacle;
 
 %default parameter values from morris_water_maze.m
 dirs = 8; % possible headings
 beta = 2; % for softmax
+eta = 0.01; % learning rate
+reward_value = 1;
+obstacle = [1.0 1.0];
+
+%sets up the circular water maze and place cells
 radius = 1.0; % arena is 2 meters wide
 sigma = 0.16; % place cell tuning width of 0.16m
-reward_value = 1;
-eta = 0.01; % learning rate
-
-% set up place cell indices across circular arena
 inx = 0;
 for i = -radius:sigma/2:radius
     for j = -radius:sigma/2:radius
@@ -26,20 +34,17 @@ end
 
 z = zeros(dirs,inx); % actor weights
 w = zeros(1,inx); % critic weights
-
-obstacle = [1.0 1.0];
 numRewards = size(rewards,1);
 
-%FINAL_TRAINRAT Summary of this function goes here
-%   Detailed explanation goes here
+%now run the trials
 for trial = 1:TRIALS
     
     trial
     
-    % get rat's initial position. start each trial in a different quadrant
+    % get rat's initial position. 
+    % start each trial in a different quadrant
     rat = getInitLocation(trial);
     
-    % let the rat explore for 100 time steps or until it gets reward
     t = 1;
     found_reward = 0;
     v = 0;
@@ -51,8 +56,14 @@ for trial = 1:TRIALS
         
         % choose an action and move rat to new location
         act = action_select (a, beta);
+        
+        %use my direction rule to adjust directon of movement
         act = adjustAct(act,prevAct);
+        
+        %keep track of previous direction of movement
         prevAct = act;
+        
+        %move the rat, employing my bouncing rule
         rat = move2(act, rat);
         
         % save off the old critic value. calculate the new critic value
@@ -81,11 +92,17 @@ for trial = 1:TRIALS
         for rNum = 1:numRewards
             reward = rewards(rNum,:);
             found_reward1 = norm([rat.x rat.y]-reward) < 0.2;
+            
+            %ensure reward center is still active
             found_reward = found_reward1 && reward_vals(rNum)>epsilonThresh;
+            
             if(found_reward)
                 reward_value = reward_vals(rNum);
+                
+                %decrease reward center value now that rat has found it
                 reward_vals(rNum) = reward_vals(rNum)*rewardDecFactor;
                 reward_vals(rNum) = reward_vals(rNum)-rewardDecValue;
+                
                 break
             end
             
@@ -101,8 +118,6 @@ for trial = 1:TRIALS
         z(act,:) = z(act,:) + eta*d*pc.act;
         
         t = t + 1;
-        
-        
 
     end
     
@@ -111,8 +126,8 @@ for trial = 1:TRIALS
         break;
     end
 
-    
-    if(mod(trial,1)==0 && drawGraph==1)
+    %draws the actor gradients after the trial is over if desired
+    if(drawGraph==1)
         subplot(121)
         scatter(pc.x,pc.y,10,'b.')
         hold on
