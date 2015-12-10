@@ -11,7 +11,7 @@ exact figures that are in my paper
 %{
 This block of code is the run that generates figures 1 and 2
 The European cities are used for the reward centers
-The reward values are constant
+The initial reward values are constant
 Rewards are depreciated by a constant factor and not constant value
 %}
 
@@ -50,38 +50,43 @@ FINAL_makeWfigure( w )
 
 %%
 
+%{
+This block of code is the run that generates figures 3 and 4
+The American cities are used for the reward centers
+The initial reward values are constant
+Rewards are depreciated by a constant factor and not constant value
+%}
+
+%function to retrieve our reward centers
+%   cities 1-5 are the American ones
 [rewards,~] = FINAL_getGeoRewards([1 2 3 4 5],0.7);
 
-%rewards = [citiesLong citiesLat];
-%reward_vals = citiesRew;
+%constant initial rewards
 reward_vals = ones(size(rewards,1),1); %values for each reward, which decrease. 
 
-%for American cities
-rewardDecFactor = 0.9; %factor to decrease reward value by each time
+%constant depreciating factor of 0.9. found by trial and error
+rewardDecFactor = 0.9; 
 rewardDecValue = 0;
 
+%threshold before reward is unusable. found by trial and error
 epsilonThresh = 0.2;
 
-%TRIALS =20;
-TRIALS =40; %for American cities
+TRIALS =40; %number of training trials
+TRIALS2 = 50; %number of test trials
 
+%run the training and obtain the actor and critic values
+%   for each place cell
 [ w,z ] = FINAL_trainRat( rewards,reward_vals,...
     rewardDecFactor,rewardDecValue, TRIALS, epsilonThresh, 0 );
 
 %runs trials without updating weights
 %records the paths that the rat takes
-
-%TRIALS2 = 15;
-TRIALS2 = 50; %for American cities, 1
-
 [ratPathsX,ratPathsY] = FINAL_testRat(z,TRIALS2);
 
-%Generates Figure 3
-%Won't be exactly the same, but the same parameters were used
+%generates figure 3 approximately
 FINAL_make3figure( rewards,z,ratPathsX,ratPathsY )
 
-%Generates Figure 4
-%Won't be exactly the same, but the same parameters were used
+%Generates Figure 4 approximately
 FINAL_makeWfigure( w )
 
 %%
